@@ -7,3 +7,12 @@ TARS is an AI Chatbot Entity planted on a Raspberry Pi. TARS can be communicated
 - Python 3
 - Tensorflow 2.10
 - Rasperry Pi 4B 
+
+# REQUIRED MODULES
+Run the following commands to install the required modules
+
+- pip install numpy
+- pip install nltk
+- pip install keras
+- pip install mysql.connector
+- pip install 
