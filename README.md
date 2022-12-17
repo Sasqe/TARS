@@ -15,4 +15,3 @@ Run the following commands to install the required modules
 - pip install nltk
 - pip install keras
 - pip install mysql.connector
-- pip install 
