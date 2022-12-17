@@ -14,4 +14,4 @@ Run the following commands to install the required modules
 - pip install numpy
 - pip install nltk
 - pip install keras
-- pip install mysql.connector-python
+- pip install mysql-connector-python
