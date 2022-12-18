@@ -4,18 +4,25 @@ import json
 import pickle
 import numpy as np
 import nltk
-import mysql.connector
+from keras.models import load_model
 from keras.models import Sequential
 from nltk.stem import WordNetLemmatizer
 from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import SGD
 from tarsDAO import AIDAO
+import h5py
+
+# Prompt user to enter a username and password
+flag=True
+while(flag==True):
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    if (AIDAO.login('', username, password)):
+        print("Login Succesfull. Beginning training...")
+        flag=False
+        
 # Define Lemmatizer
 lemmatizer = WordNetLemmatizer()
-
-# Instantiate DAO
-tarsDAO = AIDAO()
-
 # reading the json.intense file
 intents = json.loads(open("intents.json").read())
 
@@ -68,20 +75,23 @@ training = np.array(training, dtype=object)
 # Split data into x and y training sets
 train_x = list(training[:, 0])
 train_y = list(training[:, 1])
-print ("HELLO")
-if bool(tarsDAO.downloadTARS()):
-    print("TARS MEMORY FOUND. DOWNLOADING TARS...")
-    model = tarsDAO.downloadTARS()
-else:
-    print("TARS MEMORY NOT FOUND. RE-CREATING NEURAL NETWORK...")
-    model = Sequential()
-    # Neural Network layers
-    model.add(Dense(128, input_shape=(len(train_x[0]), ),
+# Open TARS
+with h5py.File('tars.h5', 'r') as tars:
+    if len(tars.keys()) != 0: # Load TARS if memory is found
+        print("TARS MEMORY FOUND. DOWNLOADING TARS...")
+        print(tars.keys())
+        model = load_model(tars)
+    else: # Otherwise create a new neural network
+        print("TARS MEMORY NOT FOUND. RE-CREATING NEURAL NETWORK...")
+        print(len(tars.keys()))
+        model = Sequential()
+        # Neural Network layers
+        model.add(Dense(128, input_shape=(len(train_x[0]), ),
                     activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(64, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(len(train_y[0]), 
+        model.add(Dropout(0.5))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(len(train_y[0]), 
                     activation='softmax'))
     
 # compile the model
@@ -95,8 +105,6 @@ hist = model.fit(np.array(train_x), np.array(train_y),
 # saving the model
 print("Saving TARS model...")
 model.save("tars.h5", hist)
-tarsDAO.uploadTARS()
-  
 # print statement to show the 
 # successful training of the model
 print("TARS Training Successful.")
