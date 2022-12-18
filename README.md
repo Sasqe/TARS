@@ -7,6 +7,7 @@ Follow the below steps to initialize TARS.
  - Navigate to the root of the TARS Directory.
  - run 'python training.py'
  - after successful training, the tars.h5 file should be populated. Uploading and downloading TARS's memory can be done with 'python upload.py' and 'python download.py' respectively.
+ - 'python tars.py' to run TARS.
 # TECHNOLOGIES
 - Python 3
 - Tensorflow 2.10
