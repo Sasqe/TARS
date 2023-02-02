@@ -2,9 +2,10 @@ from tarsDAO import AIDAO
 
 def main():
     # Print a message to indicate that the TARS memory is being uploaded
-    print("UPLOADING TARS MEMORY")
+    print("INITIALIZING DATABASE CONNECTION...")
     # Create an instance of the AIDAO class
     aidao = AIDAO()
+    print("UPLOADING TARS MEMORY")
     # Call the uploadTARS method to upload the TARS memory
     uploaded = aidao.uploadTARS()
       # Check if the upload was successful and print a message accordingly
