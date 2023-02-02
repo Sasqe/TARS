@@ -32,6 +32,7 @@ else:
 print("=====================================================================")
 # Seperate words from sentences we feed as input
 def clean(sentence):
+    # Corrects spelling mistakes
     corrected_sentence = []
     ignore_letters = ["?", "!", ".", ",", "'", ":", ";", "(",")", "-", "_"]
     for word in sentence.split():
@@ -41,6 +42,8 @@ def clean(sentence):
         else:
             corrected_sentence.append(corrected_word[0])
     sentence = " ".join(corrected_sentence)
+    
+    # Lemmatizes the sentence
     sentence_words = nltk.word_tokenize(sentence)
     sentence_words = [lemmatizer.lemmatize(word).lower()
                       for word in sentence_words if word not in ignore_letters]
@@ -49,11 +52,9 @@ def clean(sentence):
 #
 def predict_class(sentence):
     tokens = tokenizer.texts_to_sequences([sentence])
-    print(tokens)
     tokens = pad_sequences(tokens, maxlen=len(words))
     res = model.predict(np.array(tokens), verbose=0)
     pred = np.argmax(res)
-    print(res[0,pred])
     if (res[0,pred] < 0.832):
         return classes[classes.index('gptQuery')]
     return classes[pred]
