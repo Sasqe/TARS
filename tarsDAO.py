@@ -19,7 +19,7 @@ class AIDAO():
                 # Select database
                 cursor.execute("select database();") # Get the database
                 record = cursor.fetchone()
-                print("Connected to Database: ", record) # Print the database to console. 
+                #print("Connected to Database: ", record) # Print the database to console. 
                 
                 mycursor = connection.cursor()
                 # Read the h5 file into a binary string
@@ -59,10 +59,10 @@ class AIDAO():
             return False
         finally: # Close the connection
             if connection.is_connected():
-                print("Closing connection...")
+                #print("Closing connection...")
                 cursor.close()
                 connection.close()
-                print("Connection closed.")
+                #print("Connection closed.")
                 
     # Method to download TARS's memory
     def downloadTARS(self):
@@ -80,7 +80,7 @@ class AIDAO():
                 # Select database
                 cursor.execute("select database();")
                 record = cursor.fetchone()
-                print("Connected to Database: ", record)
+                #print("Connected to Database: ", record)
                 
                 cursor = connection.cursor()
                 # SQL Query to select model from database
@@ -124,7 +124,7 @@ class AIDAO():
             if connection.is_connected():
                 cursor.close()
                 connection.close()
-                print("Database connection closed.")
+                #print("Database connection closed.")
     # Method to authenticate a user with login
     def login(self, username, password):
         # Initialize connection to local database
@@ -140,7 +140,7 @@ class AIDAO():
                 # Select database
                 cursor.execute("select database();")
                 record = cursor.fetchone()
-                print("Connected to database: ", record)
+                #print("Connected to database: ", record)
                 
                 cursor = connection.cursor()
                 # SQL Query to select username from users where username and password equals input parameters
@@ -166,9 +166,9 @@ class AIDAO():
             return False
         finally: # Close connection
             if connection.is_connected():
-                print("Closing connection...")
+                #print("Closing connection...")
                 cursor.close()
                 connection.close()
-                print("Database connection closed.")
+                #print("Database connection closed.")
 
         
