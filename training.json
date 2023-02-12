@@ -96,6 +96,9 @@
         "What's the handle on the designation?",
         "What's the moniker on the designation?",
         "What's the name on the tag?",
+        "what are you?",
+        "who are you?",
+        "whats your name?",
         "What's the handle on the tag?",
         "What's the moniker on the tag?",
         "What's the name on the label?",
@@ -138,8 +141,17 @@
         "What are you exactly?",
         "What shall I refer to you as?",
         "What is the name I should know?",
+        "what are you?",
+        "who are you?",
+        "whats your name?",
         "What do you go by?",
         "What name should I know you by?",
+        "what are you? a robot?",
+        "what are you, an AI?",
+        "what are you, a bot?",
+        "what are you, a chatbot?",
+        "what are you, a chat bot?",
+        "what is your name please?",
         "What is the name I should address you as?"
       ],
       "responses": [
@@ -643,7 +655,7 @@
         "Tell me what you can perform"
       ],
       "responses": [
-        "I am an AI Weatherbot and i'm capable of many things. My capabilities are : \n 1. I can tell you the current dew point. \n 2. I can tell you the current UV Index. \n 3. I can tell you the current wind speed and direction. \n 4. I can tell you the current temperature. \n 5. I can tell you the today's highest and coldest temperatures. \n 6. I can tell you how much it rained today. \n 7. I can tell you what time the sun will set today."
+        "I'm an intelligent AI that's been trained to perform meteorological analysis. My current capabilities are : \n 1. I can tell you the current dew point. \n 2. I can tell you the current UV Index. \n 3. I can tell you the current wind speed and direction. \n 4. I can tell you the current temperature. \n 5. I can tell you the today's highest and coldest temperatures. \n 6. I can tell you how much it rained today. \n 7. I can tell you what time the sun will set today."
       ]
     },
     {

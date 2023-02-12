@@ -13,7 +13,7 @@ def main():
         print("TARS MEMORY SUCCESSFULLY UPLOADED")
     else:
         print("TARS MEMORY FAILED TO UPLOAD..")
-
+    return uploaded
 # If the script is being run directly, call the main function
 if __name__ == "__main__":
     main()
