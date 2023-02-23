@@ -21,3 +21,6 @@ Follow the below steps to initialize TARS.
 # REQUIRED MODULES
 Run the following commands to install the required modules
 - pip install -r requirements.txt
+
+# DOCUMENTATION
+Documentation can be found in the 'Documents' directory located in the root of the project.
