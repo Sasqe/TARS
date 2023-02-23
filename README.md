@@ -1,7 +1,7 @@
 # TARS
 OFFICIAL TARS REPOSITORY
 
-TARS is an AI Chatbot Entity planted on a Raspberry Pi. TARS can be communicated with by connecting to the Raspberri Pi via SSH, after which TARS automatically wakes up and connects to the user. 
+TARS is an Artificial Intelligence system. TARS has access to API's that it can use to communicate meteorological data, such as weather, to the user.   
 # Initialize TARS
 Follow the below steps to initialize TARS.
  - Navigate to the root of the TARS Directory.
