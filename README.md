@@ -1,7 +1,7 @@
 # TARS
 OFFICIAL TARS REPOSITORY
 
-TARS is an Artificial Intelligence system. TARS has access to API's that it can use to communicate meteorological data, such as weather, to the user.   
+TARS is an Artificial Intelligence system. TARS has access to API's that it can use to communicate meteorological data, such as weather, to the user. TARS also has access to the GPT-3 API, so that it can respond to prompts that it was not explicitly trained on. 
 # Initialize TARS
 Follow the below steps to initialize TARS.
  - Navigate to the root of the TARS Directory.
