@@ -1,7 +1,12 @@
 # TARS
 OFFICIAL TARS REPOSITORY
 
-TARS is an AI Chatbot Entity planted on a Raspberry Pi. TARS can be communicated with by connecting to the Raspberri Pi via SSH, after which TARS automatically wakes up and connects to the user. 
+TARS is an Artificial Intelligence system. TARS has access to API's that it can use to communicate meteorological data, such as weather, to the user. TARS also has access to the GPT-3 API, so that it can respond to prompts that it was not explicitly trained on.
+
+- TARS utilizes it's LSTM (Long Short-Term Memory) Embedded Recurrent Neural Network to process and classify language. 
+
+- This neural network works hand in hand with Keras' tokenizer and NLTK to map words to it's vector matrix, and compares an input to (n) output neurons, making probability predictions. 
+
 # Initialize TARS
 Follow the below steps to initialize TARS.
  - Navigate to the root of the TARS Directory.
@@ -15,8 +20,7 @@ Follow the below steps to initialize TARS.
 
 # REQUIRED MODULES
 Run the following commands to install the required modules
+- pip install -r requirements.txt
 
-- pip install numpy
-- pip install nltk
-- pip install keras
-- pip install mysql-connector-python
+# DOCUMENTATION
+Documentation can be found in the 'Documents' directory located in the root of the project.
