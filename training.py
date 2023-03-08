@@ -38,7 +38,7 @@ def reinit(model):
     print("NEURAL NET WORDS")
     print(len(words))
     model.add(Embedding(tokenizer_vocab_size,32,input_length=len(words))) # Embedding layer to process embedding vectors
-    model.add(LSTM(7, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
+    model.add(LSTM(10, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
     model.add(BatchNormalization()) # Batch normalization layer
     model.add(Dense(128, kernel_regularizer=regularizers.l2(0.2), kernel_initializer='variance_scaling')) # First Dense at 128 neurons. Drop this layer out.
     model.add(LeakyReLU(alpha=0.01))
@@ -155,8 +155,7 @@ except ValueError: # This will raise if the dataset is different than the one TA
 print("Saving TARS model...")
 model.save("tars.h5", hist)
 # Upload TARS to database upon finished training
-# Because I am dumb and keep overwriting tars accidentally.
-AIDAO.uploadTARS()
+
 print("Saving tokenizer...")
 with open('tokenizer.pkl', 'wb') as handle:
     pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)

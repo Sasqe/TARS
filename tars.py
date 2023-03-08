@@ -10,9 +10,12 @@ from apisource import apiQuery
 from keras.utils import pad_sequences
 from tokentrain import load_tokenizer
 import os
-from fuzzywuzzy import fuzz, process
 import math
-
+from flask import Flask, request
+from flask_cors import CORS
+from textblob import TextBlob
+app = Flask(__name__)
+CORS(app)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # Set LOG lvl to 3
 lemmatizer = WordNetLemmatizer() # Create NLTK Lemmatizer to lemmatize words
 apiquery = apiQuery() # Import apisource.py to query APIs
@@ -22,7 +25,6 @@ print("Loading language processing dependencies....")
 intents = json.loads(open("training.json", encoding="utf8").read()) # intents.json to generate intent responses
 words = pickle.load(open('words.pkl', 'rb')) # words.pkl contains the vocabulary that TARS was trained on
 classes = pickle.load(open('classes.pkl', 'rb')) # classes.pkl contains the classes that TARS was trained to make predictions on
-
 print("Loading TARS....")
 model = load_model('tars.h5') # load TARS's memory from .h5 file
 
@@ -38,14 +40,11 @@ def clean(sentence):
     corrected_sentence = [] # List to store corrected words
     ignore_letters = ["?", "!", ".", ",", "'", ":", ";", "(",")", "-", "_"] # List of characters to ignore
     for word in sentence.split():# For each word in the sentence
-        corrected_word = process.extractOne(word.lower(), words, scorer=fuzz.token_sort_ratio) # process.extractOne() returns the word with the highest ratio
-        if (corrected_word[1] < 75 or len(word) < 4): # If the word is not severely mispelled, or is too short
-            corrected_sentence.append(word) # Append the original word word as is
-            # ^ This is done to ignore short abbreviations, or words that are most likely irrelevant to the conversation's context
-        else:
-            corrected_sentence.append(corrected_word[0]) # Append corrected word
+        tb = TextBlob(word) # Create TextBlob object
+        
+        corrected_sentence.append(str(tb.correct()).lower()) # Correct the word and add it to the list (corrected_sentence
     sentence = " ".join(corrected_sentence)
-    
+    print(sentence)
     # Lemmatizes the sentence
     sentence_words = nltk.word_tokenize(sentence) # Use NLTK's tokenizer to tokenice the sentence
     sentence_words = [lemmatizer.lemmatize(word).lower()
@@ -59,7 +58,8 @@ def predict_class(sentence):
     tokens = pad_sequences(tokens, maxlen=len(words)) # Pad tokens into vector matrix
     res = model.predict(np.array(tokens), verbose=0) # TARS makes its prediction by passing the tokens to it
     pred = np.argmax(res) # Get the index of the highest probability
-    if (res[0,pred] < 0.832 and classes[pred] != 'name'): # If tars isn't too sure about what the input says
+    print(res[0,pred])
+    if (res[0,pred] < 0.832): # If tars isn't too sure about what the input says
         return classes[classes.index('gptQuery')] # Set class to 'gptQuery'
                 # ^ This is done to tell TARS to access GPT-3 Neural Network to generate a response
     return classes[pred] # Else, return class 
@@ -68,6 +68,7 @@ def predict_class(sentence):
 def get_response(tag, intents_json, message): 
     list_of_intents = intents_json['intents']
     result = ""
+    print(tag)
     for i in list_of_intents:
         if i['tag'] == tag:
             try:
@@ -89,6 +90,20 @@ def get_response(tag, intents_json, message):
                 elif i['tag'] == 'currentUvi':
                     data_result = apiquery.queryWeather(tag)
                     result = random.choice(i['responses']).format(data_result)
+                elif i['tag'] == 'currentHumidity':
+                    data_result = apiquery.queryWeather(tag)
+                    result = random.choice(i['responses']).format(data_result)
+                elif i['tag'] == 'currentPressure':
+                    data_result = apiquery.queryWeather(tag)
+                    inHg = data_result *  0.0295299830714 # Convert hPa to inHg
+                    data_result = [
+                        data_result,
+                        inHg
+                    ]
+                    result = random.choice(i['responses']).format(data_result)
+                elif i['tag'] == 'currentVisibility':
+                    data_result = apiquery.queryWeather(tag)
+                    result = random.choice(i['responses']).format(data_result)
                 elif  i['tag'] == 'dailyHighTemp':
                     data_result = apiquery.queryWeather(tag)
                     result = random.choice(i['responses']).format(data_result)
@@ -97,31 +112,68 @@ def get_response(tag, intents_json, message):
                     result = random.choice(i['responses']).format(data_result)
                 elif i['tag'] == 'dailyRain':
                     data_result = apiquery.queryWeather(tag)
-                    result = random.choice(i['responses']).format(data_result)
+                    if (data_result != 0):
+                        result = random.choice(i['responses'][0]).format(data_result)
+                    else:
+                        result = random.choice(i['responses'][1])
                 elif i['tag'] == 'dailySunset':
                     data_result = apiquery.queryWeather(tag)
                     result = random.choice(i['responses']).format(data_result)
+                elif i['tag'] == 'dailySunrise':
+                    data_result = apiquery.queryWeather(tag)
+                    result = random.choice(i['responses']).format(data_result[0], data_result[1])
+                elif i['tag'] == 'nextRain24hr':
+                    data_result = apiquery.queryWeather(tag)
+
+                    if data_result:
+                        if 'Today' in data_result:
+                            firstDay = data_result['Today'][0]
+                            phrase = random.choice(i['responses'][0]).format(firstDay)
+                            result += phrase
+                        if len(data_result) > 1:
+                            phrase = random.choice(i['responses'][1])
+                            for day, times in data_result.items():
+                                if day != 'Today':
+                                    for time in times:
+                                        phrase = "{} at {}\n".format(day, time)
+                                        result += phrase
+                    
+                    result = random.choice(i['responses'][2])
                 else:
                     result = random.choice(i['responses'])
                 break
-            except:
+            except Exception as e:
                 result = "Oops, I wasn't able to connect to the network."
+                print(e)
     return result
-
 
 def interact():
     print("Waking up TARS....")
-    print("*Yawnnnnn* I'm awake i'm awake... How can I help you?")
+    print("TARS: *Yawnnnnn* I'm awake i'm awake... How can I help you?")
     # Conversation loop
-    flag=True
-    while (flag==True):
+    while (True):
         message = input("")
         if(message == "sleep"):
-            flag = False
+            break
         else:
             data = predict_class(message)
             res = get_response(data, intents, message)
             print("TARS: ", res)
+                     
+@app.route('/chat', methods=['POST'])
+def chat():
+    data = input("")
+    #data = request.get_json()
+    message = data['prompt']
+    if message == "sleep":
+        return {"response": "TARS: Goodbye!"}
+    else:
+        print("Received: ", message)
+        response = get_response(predict_class(message), intents, message)
+        print("Response: ", response)
+        return {"response": response}    
 if __name__ == "__main__":
+#   app.run(debug=False)
     interact()
+    
 
