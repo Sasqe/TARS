@@ -1,6 +1,15 @@
-import pandas as pd
 import pickle
 
+# MODULE: tokentrain.py
+# LAST UPDATED: 03/25/2023
+# AUTHOR: CHRIS KING
+# FUNCTION : load tokenizer from pickle, set/adjust OOV token index, and update tokenizer pickle.
+
+
+
+# Function to load tokenizer from pickle, set/adjust OOV token index, and update tokenizer pickle.
+# Using Pickle, keras tokenizer
+# RETURNS: Keras tokenizer
 def load_tokenizer():
     with open('tokenizer.pkl', 'rb') as f: # Open tokenizer from pickle
         tokenizer = pickle.load(f)

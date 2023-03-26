@@ -1,5 +1,14 @@
 from tarsDAO import AIDAO
 
+# MODULE: download.py
+# LAST UPDATED: 03/25/2023
+# AUTHOR: CHRIS KING
+# FUNCTION : Upload TARS' memory to database
+
+# Function to download TARS memory to database
+# Using tarsDAO
+# RETURNS: boolean for success, failure
+
 def main():
      # Print a message to indicate that the TARS memory is being downloaded
     print("INITIALIZING DATABASE CONNECTION...")

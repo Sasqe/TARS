@@ -13,8 +13,20 @@ from keras.utils import np_utils, pad_sequences
 from tarsDAO import AIDAO
 import h5py
 from sklearn.model_selection import KFold
-
+import tensorflow as tf
 from keras.callbacks import EarlyStopping
+
+# MODULE: training.py
+# LAST UPDATED: 03/25/2023
+# AUTHOR: CHRIS KING
+# FUNCTION : Construct TARS' Neural Network Architecture, Train TARS on data set, save model, tokenizer, vocabulary, and intents to local files.
+
+# Set up GPU options
+gpu_options = tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.888)
+config = tf.compat.v1.ConfigProto(gpu_options=gpu_options)
+config.gpu_options.allow_growth = True
+# Create a TensorFlow session with GPU options
+sess = tf.compat.v1.Session(config=config)
 # Prompt user to enter a username and password
 flag=True
 # while(flag==True):
@@ -31,6 +43,12 @@ intents = json.loads(open("training.json", encoding="utf8").read())
 # Define Nadam optimizer. This optimizer works best for TARS' Long Short-Term Memory (LSTM) network.
 Nadam = optimizers.Nadam(learning_rate=0.001, clipvalue=1.0, beta_1=0.9, beta_2=0.999, epsilon=1e-07, name='Nadam')
 
+# Function to built TARS ( NEURAL NETWORK ARCHITECTURE )
+# Using Tensorflow, Keras
+# Using Embedding Vectors
+# Using LSTM RNN, Leaky Dropout Regularization, Batch Normalization
+# PARAMETERS: Model
+# RETURNS: built model
 def reinit(model):
     print("Re-initializing TARS...")
 ########################################################################################################
@@ -38,7 +56,7 @@ def reinit(model):
     print("NEURAL NET WORDS")
     print(len(words))
     model.add(Embedding(tokenizer_vocab_size,32,input_length=len(words))) # Embedding layer to process embedding vectors
-    model.add(LSTM(10, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
+    model.add(LSTM(20, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
     model.add(BatchNormalization()) # Batch normalization layer
     model.add(Dense(128, kernel_regularizer=regularizers.l2(0.2), kernel_initializer='variance_scaling')) # First Dense at 128 neurons. Drop this layer out.
     model.add(LeakyReLU(alpha=0.01))
@@ -57,9 +75,16 @@ def reinit(model):
 # K-Fold CROSS VALIDATION =================================================================================================
 
 scores = [] # Initialize a list to store the evaluation metrics
+
+# Function to execute training
+# Using K-Fold Cross Validation
+# PARAMETERS: Model
+# RETURNS: Tars Model with best scores
 def train(model):
     num_folds = 5 # Number of folds, we'll use 5
-
+    best_score = float('-inf')
+    
+    tars = None
     # K-Fold Cross Validator comes from Sklearn
     kf = KFold(n_splits=num_folds, shuffle=True, random_state=42)
 
@@ -75,9 +100,13 @@ def train(model):
         # Evaluate the model on the test data for this fold
         score = model.evaluate(x_test, y_test, verbose=0)
         scores.append(score)
-    # We are returning TARS's weights at the end of each fold, and using those weights on the next fold. 
-    return hist
-# creating empty lists to store data
+    # Update tars and best score with best score
+        if float(score[1]) > best_score:
+            best_score = float(score[1])
+            tars = hist
+    print("BEST SCORE", best_score)
+    return tars
+# creating empty lists to store data: words, intents, documents, and ignore letters
 words = []
 classes = []
 documents = []
@@ -132,7 +161,7 @@ train_x_encoded_padded_words = pad_sequences(train_x_encoded_words, maxlen=len(w
 
 # Open TARS memory from .h5 file
 with h5py.File('tars.h5', 'r') as tars:
-    if len(tars.keys()) != 0 and not True: # Load TARS if memory is found. Currently, this is disabled.
+    if len(tars.keys()) != 0 and 0 == 1: # Load TARS if memory is found. Currently, this is disabled.
         print("TARS MEMORY FOUND. DOWNLOADING TARS...")
         print(tars.keys())
         model = load_model(tars)
@@ -144,16 +173,16 @@ with h5py.File('tars.h5', 'r') as tars:
 early_stop = EarlyStopping(monitor='val_accuracy', patience=10, mode='max',  min_delta=0.01,verbose=1,restore_best_weights=True)
 # Activate training
 try:
-    hist = train(model) # Train TARS
+    tars = train(model) # Train TARS
 except ValueError: # This will raise if the dataset is different than the one TARS was trained on.
     print(ValueError)
     print("Input data difference detected. Re-initializing TARS.") # TARS's neural network will need to be re-created if the data set is different.
     model = reinit(model)
     print("Re-fitting TARS.")
-    hist = train(model)
+    tars = train(model)
 # saving the model
 print("Saving TARS model...")
-model.save("tars.h5", hist)
+model.save("tars.h5", tars)
 # Upload TARS to database upon finished training
 
 print("Saving tokenizer...")

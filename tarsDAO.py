@@ -2,8 +2,17 @@ import mysql.connector
 from mysql.connector import errorcode
 from keras.models import load_model
 
+# MODULE: tarsDAO.py
+# LAST UPDATED: 03/25/2023
+# AUTHOR: CHRIS KING
+# FUNCTION : Perform database operations: login, upload, and download
+
+
 class AIDAO():
-    # Method to upload TARS's memory
+    
+    # Function to upload TARS' memory to database
+    # Using MySQL Connector
+    # RETURNS: Boolean for success or failure
     def uploadTARS(self):
         # Initialize connection to local database
         print("Opening connection to database...")
@@ -64,7 +73,9 @@ class AIDAO():
                 connection.close()
                 #print("Connection closed.")
                 
-    # Method to download TARS's memory
+    # Function to download TARS' memory to database
+    # Using MySQL Connector
+    # RETURNS: Boolean for success or failure
     def downloadTARS(self):
         # Initialize connection to local database
         print("Opening connection to database...")
@@ -125,7 +136,12 @@ class AIDAO():
                 cursor.close()
                 connection.close()
                 #print("Database connection closed.")
-    # Method to authenticate a user with login
+    
+    
+    # Function to upload TARS' memory to database
+    # Using MySQL Connector
+    # PARAMETERS: username, password
+    # RETURNS: Boolean for success or failure
     def login(self, username, password):
         # Initialize connection to local database
         connection = mysql.connector.connect(host='localhost',

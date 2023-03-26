@@ -8,66 +8,72 @@ import json
 from io import StringIO
 from tokentrain import load_tokenizer
 from keras.preprocessing.text import Tokenizer
+
+# MODULE: testing.py
+# LAST UPDATED: 03/25/2023
+# AUTHOR: CHRIS KING
+# FUNCTION : Automated unit testing for TARS
+
 intents = json.loads(open("training.json", encoding="utf8").read()) # intents.json to generate intent responses
 dao = AIDAO()
 class TestTARS(unittest.TestCase):
+    # Function to initialize test predictions with prompts
+    # self.(blank) for intent
+    # predict_class("blank") to send prompt to TARS
     def setUp(self):
-        self.upload = upload
-        self.download = download
-        self.tokenizer = load_tokenizer()
-        self.login = dao.login("sasqe", "sq")
+        # CLASS PREDICTION 
+        
         # CURRENT TEMPERATURE
         self.current_temp = predict_class("What is the current temperature?")
+        # CURRENT WEATHER
+        self.current_weather = predict_class("What is the current weather?")
         # CURRENT DEW POINT
         self.current_dew = predict_class("What is the current dew point?")
         # CURRENT UV INDEX
         self.current_uvi = predict_class("What is the current UV index?")
         # CURRENT WIND SPEED
         self.current_wind = predict_class("What is the current wind speed?")
-        # HIGHEST TEMP TODAY
-        self.highest_temp = predict_class("What is the highest temperature today?")
-        # LOWEST TEMP TODAY
-        self.lowest_temp = predict_class("What is the lowest temperature today?")
-        # DAILY RAIN
+        # CURRENT HUMIDITY
+        self.current_humidity = predict_class("What is the current humidity?")
+        # CURRENT PRESSURE
+        self.current_pressure = predict_class("What is the current pressure?")
+        # CURRENT VISIBILITY
+        self.current_visibility = predict_class("What is the current visibility?")
+        # RAIN TODAY
         self.daily_rain = predict_class("How much rain did we get today?")
         # TODAYS SUNSET
         self.daily_sunset = predict_class("What time is the sunset today?")
-        # API CURRENT TEMP
-        self.api_current_temp = get_response("currentTemperature", intents, "")
-        # GPT-3
-        self.gpt3 = get_response("gptQuery", intents, "What is two plus two?")
-        # API CURRENT DEW POINT
-        self.api_current_dew = get_response("currentDewPoint", intents, "")
-        # API CURRENT UV INDEX
-        self.api_current_uvi = get_response("currentUvi", intents, "")
-        # API CURRENT WIND
-        self.api_current_wind = get_response("currentWind", intents, "")
-        # API DAILY HIGH TEMP
-        self.api_highest_temp = get_response("dailyHighTemp", intents, "")
-        # API DAILY LOW TEMP
-        self.api_lowest_temp = get_response("dailyLowTemp", intents, "")
-        # API DAILY RAIN
-        self.api_daily_rain = get_response("dailyRain", intents, "")
-        # API TODAYS SUNSET
-        self.api_daily_sunset = get_response("dailySunset", intents, "")
-        self.api_error = "Oops, I wasn't able to connect to the network."
-    def test_upload_tars_memory(self):
-        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            result = self.upload()
-            self.assertTrue(result)
-        
-    def test_download_tars_memory(self):
-        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            result = self.download()
-            self.assertTrue(result)
-        
-    def test_token_train(self):          
-        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertIsInstance(self.tokenizer, Tokenizer)
+        # TODAYS SUNRISE
+        self.daily_sunrise = predict_class("What time is the sunrise today?")
+        #TODAYS/WEEKS RAIN
+        self.rain_week = predict_class("How much rain will we get this week?")
+        # UVI FORECAST
+        self.uvi_forecast = predict_class("What is the UV index for monday?")
+        # WIND FORECAST
+        self.wind_forecast = predict_class("What is the wind speed for tuesday?")
+        # RAIN FORECAST
+        self.rain_forecast = predict_class("Will it rain on wednesday?")
+        # HIGH TEMP FORECAST
+        self.highTemp_forecast = predict_class("What is the highest temperature for thursday?")
+        # LOW TEMP FORECAST
+        self.lowTemp_forecast = predict_class("What is the lowest temperature for friday?")
+        # WEATHER FORECAST
+        self.weather_forecast = predict_class("What is the weather like for saturday?")
+        # HUMIDITY FORECAST
+        self.humidity_forecast = predict_class("What is the humidity for sunday?")
+        # PRESSURE FORECAST
+        self.pressure_forecast = predict_class("What is the air pressure for monday?")
+        # VISIBILITY FORECAST
+        self.visibility_forecast = predict_class("What is the visibility for tuesday?")
+    
     # TARS current temperature        
     def test_tars_current_temperature(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
             self.assertEqual(self.current_temp, "currentTemperature")
+    # TARS current weather
+    def test_tars_current_weather(self):
+        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
+            self.assertEqual(self.current_weather, "currentWeather")
     # TARS current dew point
     def test_tars_current_dew_point(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
@@ -80,14 +86,18 @@ class TestTARS(unittest.TestCase):
     def test_tars_current_wind_speed(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
             self.assertEqual(self.current_wind, "currentWind")
-    # TARS highest temperature today
-    def test_tars_highest_temp_today(self):
+        # TARS current humidity
+    def test_tars_current_humidity(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertEqual(self.highest_temp, "dailyHighTemp")
-    # TARS lowest temperature today
-    def test_tars_lowest_temp_today(self):
+            self.assertEqual(self.current_humidity, "currentHumidity")
+    # TARS current pressure
+    def test_tars_current_pressure(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertEqual(self.lowest_temp, "dailyLowTemp")
+            self.assertEqual(self.current_pressure, "currentPressure")
+    # TARS current visibility
+    def test_tars_current_visibility(self):
+        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
+            self.assertEqual(self.current_visibility, "currentVisibility")
     # TARS daily rain
     def test_tars_daily_rain(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
@@ -96,42 +106,52 @@ class TestTARS(unittest.TestCase):
     def test_tars_daily_sunset(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
             self.assertEqual(self.daily_sunset, "dailySunset")
-    # TARS login
-    def test_tars_login(self):
+    # TARS daily sunrise
+    def test_tars_daily_sunrise(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertTrue(self.login) 
-    # TARS API Current Temperature
-    def test_tars_api_current_temperature(self):
+            self.assertEqual(self.daily_sunrise, "dailySunrise")
+    # TARS rain week
+    def test_tars_rain_week(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_current_temp, self.api_error)
-    # TARS API Current Dew Point
-    def test_tars_api_current_dew_point(self):
+            self.assertEqual(self.rain_week, "rainWeek")
+    # TARS UVI forecast
+    def test_tars_uvi_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_current_dew, self.api_error)
-    # TARS API Current UV Index
-    def test_tars_api_current_uv_index(self):
+            self.assertEqual(self.uvi_forecast, "uviForecast")
+    # TARS wind forecast
+    def test_tars_wind_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_current_uvi, self.api_error)
-    # TARS API Current Wind Speed
-    def test_tars_api_current_wind_speed(self):
+            self.assertEqual(self.wind_forecast, "windForecast")
+    # TARS rain forecast
+    def test_tars_rain_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_current_wind, self.api_error)
-    # TARS API Highest Temperature Today
-    def test_tars_api_highest_temp_today(self):
+            self.assertEqual(self.rain_forecast, "rainForecast")
+    # TARS high temp forecast
+    def test_tars_high_temp_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_highest_temp, self.api_error)
-    # TARS API Lowest Temperature Today
-    def test_tars_api_lowest_temp_today(self):
+            self.assertEqual(self.highTemp_forecast, "highTempForecast")
+    # TARS low temp forecast
+    def test_tars_low_temp_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_lowest_temp, self.api_error)
-    # TARS API Daily Rain
-    def test_tars_api_daily_rain(self):
+            self.assertEqual(self.lowTemp_forecast, "lowTempForecast")
+    # TARS weather forecast
+    def test_tars_weather_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_daily_rain, self.api_error)
-    # TARS API Daily Sunset
-    def test_tars_api_daily_sunset(self):
+            self.assertEqual(self.weather_forecast, "weatherForecast")
+    # TARS humidity forecast
+    def test_tars_humidity_forecast(self):
         with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
-            self.assertNotEqual(self.api_daily_sunset, self.api_error)
+            self.assertEqual(self.humidity_forecast, "humidityForecast")
+    # TARS pressure forecast
+    def test_tars_pressure_forecast(self):
+        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
+            self.assertEqual(self.pressure_forecast, "pressureForecast")
+    # TARS visibility forecast
+    def test_tars_visibility_forecast(self):
+        with unittest.mock.patch('sys.stdout', new=StringIO()) as fake_out:
+            self.assertEqual(self.visibility_forecast, "visibilityForecast")
+            
+            
 if __name__ == '__main__':
     import colorama # Colorama used for green/red for ok/failure
     colorama.init()
@@ -140,7 +160,7 @@ if __name__ == '__main__':
     buffer = ''
     tests = unittest.defaultTestLoader.loadTestsFromTestCase(TestTARS) # Test runner
     for i, test_case in enumerate(tests): # For each test in test runner print result.
-        result = test_runner.run(test_case)
+        result = test_runner.run(test_case) # Get the test result from test runner
         if result.wasSuccessful():
             print(f"{test_case._testMethodName}:" + Fore.LIGHTGREEN_EX + "[OK]" + Style.RESET_ALL)
         else:
