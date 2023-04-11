@@ -1,6 +1,9 @@
 import requests
 import datetime
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # MODULE: apisource.py
 # LAST UPDATED: 03/25/2023
 # AUTHOR: CHRIS KING
@@ -17,7 +20,7 @@ class apiQuery():
     def queryGPT(self, messages):
         import openai  # Import openAI library
         # Import openAI key
-        openai.api_key = "{your_api_key_here}"
+        openai.api_key = os.getenv("AI_KEY")
          # Configure GPT-3 Neural Network
         print("Res")
         response = openai.ChatCompletion.create(
@@ -38,15 +41,15 @@ class apiQuery():
         # try:
             data = ""
             # First, we use API endpoint to generate latitude and longitude based on city and state.
-            georeq = 'http://api.openweathermap.org/geo/1.0/direct?q=Phoenix,AZ,US&appid={Your_api_key_here}}'
+            georeq = f'http://api.openweathermap.org/geo/1.0/direct?q=Phoenix,AZ,US&appid={os.getenv("WEATHER_KEY")}'
             georesponse = requests.get(georeq)
             geojson = georesponse.json()[0]
             lat = geojson["lat"]
             lon = geojson["lon"]
             # Next, we pass latitude and longitude into weather API endpoint
-            endpoint = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=currently,alerts&units=imperial&appid={Your_api_key_here}'
+            endpoint = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=currently,alerts&units=imperial&appid={os.getenv("WEATHER_KEY")}'
             response = requests.get(endpoint)  # Send query to API endpoint
-            responsejson = response.json()  # Conver to JSON
+            responsejson = response.json()  # Convert to JSON
             
             if intent == "uviForecast":  # <-- If intent is uviForecast
                 
@@ -83,12 +86,15 @@ class apiQuery():
                         
                         try: # <-- Try rain at on daily forecast
                             rain = daily_data['rain']
+                            pop = daily_data['pop']
                         except: # <-- If no rain, return 0
-                            rain = None  
+                            rain = None 
+                            pop = 0 
                         # Create data dictionary with day, date, and rain
                         data = {
                             "day": datetime.datetime.strftime(day, '%A'),
                             "date": day,
+                            "pop": pop,
                             "rain": rain
                         }
                         break
@@ -118,7 +124,34 @@ class apiQuery():
                             "low_temp": temp
                         }
                         break
-                     
+            elif intent == "tempForecast": # <-- If intent is lowTempForecast
+                for daily_data in responsejson['daily']: # <-- Iterate over daily forecasts and find matching timestamp to the day parameter
+                    if datetime.datetime.utcfromtimestamp(daily_data['dt']).strftime('%Y-%m-%d') == day.strftime('%Y-%m-%d'):
+                        
+                        avg_temp = daily_data['temp']['day'] # <-- If day matches, set temp to the avg temp value
+                        temp_min = daily_data['temp']['min']
+                        temp_max = daily_data['temp']['max']
+                        # Create data dictionary with the day, date, and low temp
+                        data = {
+                            "day": datetime.datetime.strftime(day, '%A'),
+                            "date": day,
+                            "avg_temp": avg_temp,
+                            "temp_min": temp_min,
+                            "temp_max": temp_max
+                        }
+                        break
+            elif intent == "dewForecast": # <-- If intent is lowTempForecast
+                for daily_data in responsejson['daily']: # <-- Iterate over daily forecasts and find matching timestamp to the day parameter
+                    if datetime.datetime.utcfromtimestamp(daily_data['dt']).strftime('%Y-%m-%d') == day.strftime('%Y-%m-%d'):
+                        
+                        dew_point = daily_data['dew_point'] # <-- If day matches, set dew point
+                        # Create data dictionary with the day, date, and low temp
+                        data = {
+                            "day": datetime.datetime.strftime(day, '%A'),
+                            "date": day,
+                            "dew_point": dew_point,
+                        }
+                        break
             elif intent == "weatherForecast": # <-- If intent is weatherForecast
                 for daily_data in responsejson['daily']: # <-- Iterate over daily forecasts and find matching timestamp to the day parameter
                     if datetime.datetime.utcfromtimestamp(daily_data['dt']).strftime('%Y-%m-%d') == day.strftime('%Y-%m-%d'):
@@ -133,6 +166,11 @@ class apiQuery():
                         clouds = daily_data['clouds']
                         
                         pop = daily_data['pop']
+                        rain_desc = "rain"
+                        for weather in daily_data['weather']:
+                            if weather['main'] == "Rain":
+                                rain_desc = weather['description']
+                        
                         # Create data dictionary with the day, date, and all the variables
                         data = {
                             "day": datetime.datetime.strftime(day, '%A'),
@@ -146,11 +184,13 @@ class apiQuery():
                             
                             "clouds": clouds,
                             
-                            "pop": pop
+                            "pop": pop,
+                            "rain_desc": rain_desc
                         }
                         break
                     
             elif intent == "humidityForecast": # <-- If intent is humidityForecast
+                
                 for daily_data in responsejson['daily']: # <-- Iterate over daily forecasts and find matching timestamp to the day parameter
                     if datetime.datetime.utcfromtimestamp(daily_data['dt']).strftime('%Y-%m-%d') == day.strftime('%Y-%m-%d'):
                         
@@ -177,19 +217,6 @@ class apiQuery():
                         }
                         break
                     
-            elif intent == "visibilityForecast": # <-- If intent is visibilityForecast ( This is a premium API feature, will throw error until we upgrade )
-                
-                for daily_data in responsejson['daily']: # <-- Iterate over daily forecasts and find matching timestamp to the day parameter
-                    if datetime.datetime.utcfromtimestamp(daily_data['dt']).strftime('%Y-%m-%d') == day.strftime('%Y-%m-%d'):
-                        
-                        visibility = daily_data['visibility'] # <-- If day matches, set visibility to the visibility value
-                        # Create data dictionary with the day, date, and visibility
-                        data = {
-                            "day": datetime.datetime.strftime(day, '%A'),
-                            "date": day,
-                            "visibility": visibility
-                        }
-                        break
             # Error handling error if intent is not found        
             else:
                 data = "Error"
@@ -206,15 +233,15 @@ class apiQuery():
     def queryWeather(self, intent):
         # try:
             # First, we use API endpoint to generate latitude and longitude based on city and state.
-            georeq = 'http://api.openweathermap.org/geo/1.0/direct?q=Phoenix,AZ,US&appid={Your_api_key_here}'
+            georeq = f'http://api.openweathermap.org/geo/1.0/direct?q=Phoenix,AZ,US&appid={os.getenv("WEATHER_KEY")}'
             georesponse = requests.get(georeq)
             geojson = georesponse.json()[0]
             lat = geojson["lat"]
             lon = geojson["lon"]
             # Next, we pass latitude and longitude into weather API endpoint
-            endpoint = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=minutely,alerts&units=imperial&appid={Your_api_key_here}'
+            endpoint = f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude=minutely,alerts&units=imperial&appid={os.getenv("WEATHER_KEY")}'
             response = requests.get(endpoint) # Send query to API endpoint
-            responsejson = response.json() # Conver to JSON
+            responsejson = response.json() # Convert to JSON
             
             # Switch case to get the data we need based on the intent.
             if intent == "currentTemperature": # <-- If intent is currentTemperature
@@ -270,11 +297,8 @@ class apiQuery():
                 # Set data to the value in the current forecast: visibility
                 data = responsejson['current']['visibility']
             
-            elif intent == "dailyRain": # <-- If intent is dailyRain
-                try: # <-- Try rain at day [0] ( current day )
-                    data = responsejson['daily'][0]['rain']
-                except: # <-- If no rain, return 0
-                    data = 0
+            elif intent == "currentRain": # <-- If intent is dailyRain
+                data = next((weather['description'] for weather in responsejson['current']['weather'] if weather['main'] == 'Rain'), None)
             
             elif intent == "dailySunset": # <-- If intent is dailySunset
                 # Set data to the value in the current forecast: sunset
@@ -328,7 +352,140 @@ class apiQuery():
                         days_with_rain[dt.strftime("%A")] = forecast['rain'] # <-- Store rain amount in dictionary at index of day
                 # Set data to dictionary with days of rain and times it will rain
                 data = days_with_rain
+            
+            elif intent == "weatherWeek":
+                days = {}
+                now = datetime.datetime.now()
+                  # NEXT 7 DAYS FORECAST
+                print(len(responsejson['daily']))
+                for forecast in responsejson['daily']: # <-- Loop through daily forecast
+                    
+                    dt = datetime.datetime.fromtimestamp(forecast['dt']) # <-- Convert Unix timestamp to datetime for index
+                    day = dt.strftime("%A")
+                    if dt.strftime('%Y-%m-%d') == now.strftime('%Y-%m-%d'):
+                        day = "Today"
+                    # Compile weather
+                    if 'rain' in forecast and forecast['rain'] > 0: # <-- If it will rain on indexed day
+                        rain = forecast['rain'] # <-- Store rain amount in dictionary at index of day
+                    avg_temp = forecast['temp']['day']
+                    min_temp = forecast['temp']['min']
+                    max_temp = forecast['temp']['max']
+                    uvi = forecast['uvi']
+                    
+                    wind_speed = forecast['wind_speed']
+                    wind_gust = forecast['wind_gust']
+                    
+                    clouds = forecast['clouds']
+                    
+                    rain_pop = forecast['pop']
+                    rain_desc = "rain"
+                    for weather in forecast['weather']:
+                        if weather['main'] == "Rain":
+                            rain_desc = weather['description']
+                        
+
+                    days[day] = {
+                        "day": day,
+                        "avg_temp": avg_temp,
+                        "min_temp": min_temp,
+                        "max_temp": max_temp,
+                        "uvi": uvi,
+                        
+                        "wind_speed": wind_speed,
+                        "wind_gust": wind_gust,
+                        "clouds": clouds,
+                        
+                        "rain_pop": rain_pop,
+                        "rain_desc": rain_desc 
+                    }
+                # Set data to dictionary with days of rain and times it will rain
+                data = days
+            elif intent == "tempWeek":
+                days = {}
+                now = datetime.datetime.now()
+                  # NEXT 7 DAYS FORECAST
+                print(len(responsejson['daily']))
+                for forecast in responsejson['daily']: # <-- Loop through daily forecast
+                    
+                    dt = datetime.datetime.fromtimestamp(forecast['dt']) # <-- Convert Unix timestamp to datetime for index
+                    day = dt.strftime("%A")
+                    if dt.strftime('%Y-%m-%d') == now.strftime('%Y-%m-%d'):
+                        day = "Today"
+                    # Compile weather
+                    avg_temp = forecast['temp']['day']
+                    min_temp = forecast['temp']['min']
+                    max_temp = forecast['temp']['max']
+                    days[day] = {
+                        "day": day,
+                        "avg_temp": avg_temp,
+                        "min_temp": min_temp,
+                        "max_temp": max_temp
+                    }
+                # Set data to dictionary with days of rain and times it will rain
+                data = days   
                 
+            elif intent == "humidityWeek":
+                days = {}
+                now = datetime.datetime.now()
+                  # NEXT 7 DAYS FORECAST
+                print(len(responsejson['daily']))
+                for forecast in responsejson['daily']: # <-- Loop through daily forecast
+                    
+                    dt = datetime.datetime.fromtimestamp(forecast['dt']) # <-- Convert Unix timestamp to datetime for index
+                    day = dt.strftime("%A")
+                    if dt.strftime('%Y-%m-%d') == now.strftime('%Y-%m-%d'):
+                        day = "Today"
+                    # Compile weather
+                    humidity = forecast['humidity']
+                    days[day] = {
+                        "day": day,
+                        "humidity": humidity,
+                    }
+                # Set data to dictionary with days of rain and times it will rain
+                data = days  
+ 
+
+            elif intent == "uviWeek":
+                days = {}
+                now = datetime.datetime.now()
+                  # NEXT 7 DAYS FORECAST
+                print(len(responsejson['daily']))
+                for forecast in responsejson['daily']: # <-- Loop through daily forecast
+                    
+                    dt = datetime.datetime.fromtimestamp(forecast['dt']) # <-- Convert Unix timestamp to datetime for index
+                    day = dt.strftime("%A")
+                    if dt.strftime('%Y-%m-%d') == now.strftime('%Y-%m-%d'):
+                        day = "Today"
+                    # Compile weather
+                    uvi = forecast['uvi']
+                    days[day] = {
+                        "day": day,
+                        "uvi": uvi,
+                    }
+                # Set data to dictionary with days of rain and times it will rain
+                data = days
+               
+            elif intent == "windWeek":
+                days = {}
+                now = datetime.datetime.now()
+                  # NEXT 7 DAYS FORECAST
+                print(len(responsejson['daily']))
+                for forecast in responsejson['daily']: # <-- Loop through daily forecast
+                    
+                    dt = datetime.datetime.fromtimestamp(forecast['dt']) # <-- Convert Unix timestamp to datetime for index
+                    day = dt.strftime("%A")
+                    if dt.strftime('%Y-%m-%d') == now.strftime('%Y-%m-%d'):
+                        day = "Today"
+                    # Compile weather
+                    wind_speed = forecast['wind_speed']
+                    wind_gust = forecast['wind_gust']
+                    days[day] = {
+                        "day": day,
+                        "wind_speed": wind_speed,
+                        "wind_gust": wind_gust
+                    }
+                # Set data to dictionary with days of rain and times it will rain
+                data = days          
             # Error handling error if intent is not found
             else:
                 data = "Error"

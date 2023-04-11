@@ -1,8 +1,7 @@
-import en_core_web_sm
 import datetime
-nlp = en_core_web_sm.load()
 import enchant
 import nltk
+import dateparser
 from nltk.stem import WordNetLemmatizer
 
 # MODULE: ner.py
@@ -12,43 +11,44 @@ from nltk.stem import WordNetLemmatizer
 
 
 # Function to extract day of week from user input
-# Using NLTK Named Entity Recognition
+# Using dateparser Named Entity Recognition
 # PARAMETERS: input text
 # SOURCE MODULE: tars.py
 # RETURNS: date of day of week
 def extract_day_of_week(input_text):
-    # Load input text into NLP model
-    doc = nlp(input_text)
-    today = datetime.date.today() # <-- Get today's datetime
-    current_weekday = today.weekday() # <-- Get today's weekday
-    # List of weekdays
+    today = datetime.date.today()
+    current_weekday = today.weekday()
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    day = ""
-    isToday = False 
-    # For each entity in the input text
-    for ent in doc.ents:
-        # If the entity is a date
-        if ent.label_ == "DATE":
-            # For each word in the entity, if the entity is a week day or today/tomorrow, set day to that day
-            for word in ent.text.split():
-                if word.capitalize() in weekdays:
-                    day = word.capitalize()
-                elif word.lower() == "tomorrow":
-                    day = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%A')
-                elif word.lower() == "today":
-                    isToday = True
-                    day = today.strftime('%A')
-                    
-    try: # <-- try  to get the index of the day in the list of weekdays
-        days_until_day = weekdays.index(day) - current_weekday
-    except ValueError: # <-- if the day is not in the list of weekdays, return None
-        return None
-    # If the are not asking for today but the next occurence of today, set days_until_day to 7
-    if days_until_day <= 0 and not isToday:
+    is_today = False
+    
+    # Check for today/tomorrow in the input text
+    if "today" in input_text.lower() or "the day" in input_text.lower():
+        is_today = True
+        day = today.strftime('%A')
+    elif "tomorrow" in input_text.lower():
+        day = (today + datetime.timedelta(days=1)).strftime('%A')
+    else:
+        # Parse dates using dateparser library
+        parsed_date = dateparser.parse(input_text, settings={'PREFER_DATES_FROM': 'future'})
+        if parsed_date and parsed_date.weekday() < 7:
+            day = weekdays[parsed_date.weekday()]
+        else:
+            # Search for a weekday in the input text
+            for weekday in weekdays:
+                if weekday.lower() in input_text.lower():
+                    day = weekday
+                    break
+            else:
+                return None
+    
+    # Calculate days until next occurrence of the day
+    days_until_day = weekdays.index(day) - current_weekday
+    if days_until_day <= 0 and not is_today:
         days_until_day += 7
-    # Return the next occurence of the day
-    next = today + datetime.timedelta(days=days_until_day)
-    return next
+    
+    # Return next occurrence of the day
+    next_day = today + datetime.timedelta(days=days_until_day)
+    return next_day
 
 # Function to correct each word in user input
 # Using enchant distance algorithm

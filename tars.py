@@ -12,7 +12,11 @@ import math
 from ner import extract_day_of_week, correct_input, clean
 from flask import Flask, request
 from flask_cors import CORS
+import socket
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 # MODULE: tars.py [ ENDPOINT MODULE ]
 # LAST UPDATED: 03/25/2023
 # AUTHOR: CHRIS KING
@@ -37,8 +41,14 @@ print("Loading tokenizer...")
 tokenizer = load_tokenizer() # Import tokentrain.py to load Keras tokenizer, update its OOV vector index, and update it's pickle.
 # Array to hold message history
 messages = []
+# Context of conversation
+context = {
+    "tag": "",
+    "context": ""
+}
 # Set starting and wakeup prompts.
-messages.append({"role": "system", "content": "Your name is TARS, an Artificial Intelligence system developed by a data scientist known as King AI. You have been built with a Long Short-Term Memory (LSTM) Recurrent Neural Network trained on intent-based natural language classification tasks, with JARVIS-like manneurism. If the question is not related to meteorology, answer the question or prompt normally. If it is related to meteorology, respond with a variation of 'My apologies sir. I wasn't trained on how to get that data yet.'. Answer as concisely as possible. Examples: 'What is a neural network?', Answer normally. 'How hot was it yesterday?', 'Oops, my apologies. I wasn't trained on how to get that data yet.', 'What is the Davinci-003 Neural Network?', Answer normally. 'How much will it rain next', 'Sorry sir, I don't think I know how to get that data yet.'. 'System.out.println('Hello World!')', 'Hello World!'"})
+sys_prompt = {"role": "system", "content": "Your name is TARS, an Artificial Intelligence system developed by a data scientist known as King AI. You have been built with a Long Short-Term Memory (LSTM) Recurrent Neural Network trained on intent-based natural language classification tasks. If the question is not related to meteorology, answer the question or prompt concisely. If it is related to meteorology, respond with a variation of 'My apologies sir. I wasn't trained on how to get that data yet.'. Answer as concisely as possible. Examples: 'Hello there', 'Hello, sir. What can I help you with?', 'What is a neural network?', Answer normally. 'How hot was it yesterday?', 'My apologies, sir. I wasn't trained on how to get that data yet.', 'What is the Davinci-003 Neural Network?', Answer normally. 'How much will it rain next', 'My apologies sir, I don't think I know how to get that data yet.'. 'System.out.println('Hello World!')', 'Hello World!', 'Hello!', ''What can I help you with, sir?'"}
+messages.append(sys_prompt)
 # ========================================== TARS is ready to go ======================================================================
 
 
@@ -47,25 +57,56 @@ messages.append({"role": "system", "content": "Your name is TARS, an Artificial 
 # PARAMETERS: input text
 # RETURNS: intent of the input text
 def predict_class(message):
+    global context
     message = clean(message) # Clean the sentence
     tokens = tokenizer.texts_to_sequences([message]) # Use Keras tokenizer to convert words to tokens
     tokens = pad_sequences(tokens, maxlen=len(words)) # Pad tokens into vector matrix
     res = model.predict(np.array(tokens), verbose=0) # TARS makes its prediction by passing the tokens to it
-    pred = np.argmax(res) # Get the index of the highest probability
+    pred = np.argmax(res) # Get the index of the highest probabilit
+
+    print(res[0,pred])
+    print(classes[pred])
     #print(res[0,pred])
-    if (res[0,pred] < 0.832): # If tars isn't too sure about what the input says
+    if (res[0,pred] < 0.777): # If tars isn't too sure about what the input says
         #try:
+            context["tag"], context["context"] = "", ""
             return classes[classes.index('gptQuery')] # Set class to 'gptQuery'
                 # ^ This is done to tell TARS to access GPT-3 Neural Network to generate a response
         #except:
             #return classes[classes.index('gptQuery')]
     #print("MESSAGE:", message, "CLASS:", classes[pred])
+    # Get intent 
+    intent = get_intent_by_tag(classes[pred])
+
+    try:
+        context["tag"], context["context"] = intent["context"].split(" ")
+    except:
+        print("No context to set.")
+        
+    print("INTENT", intent["tag"])
+    print("CONTEXT", context)
+    print("TYPE OF CONTEXT", type(context))
+    if classes[pred] == "contextWeekly":
+        classes[pred] = [intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "week" in intent["context"]][0]
+    elif classes[pred] == "contextForecast":
+        classes[pred] = [intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "forecast" in intent["context"]][0]
+    elif classes[pred] == "contextCurrently":
+        classes[pred] = [intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "current" in intent["context"]][0]
+    # CONTEXTS : 'forecast', 'week', 'current'
     return classes[pred] # Else, return class 
 
 # Function to generate response from TARS
 # Using TARS' intents, apisource.py module, ner.py module
 # PARAMETERS: intent, message history
 # RETURNS: TARS's fully generated response
+
+# Define function to get intent by tag
+def get_intent_by_tag(tag):
+    for intent in intents:
+        if intent['tag'] == tag:
+            return intent
+    return None
+
 def get_response(tag, messages): 
     message = messages[len(messages) - 1]['content'] # <-- Set the user message to the most recent message in the history
     result = "" # <-- initialize result variable
@@ -127,10 +168,10 @@ def get_response(tag, messages):
                     data_result = apiquery.queryWeather(tag) # data_result: visibility float
                     result = random.choice(i['responses']).format(data_result)
                     
-                elif i['tag'] == 'dailyRain': # <-- dailyRain - return a response from weather API
+                elif i['tag'] == 'currentRain': # <-- currentRain - return a response from weather API
                     data_result = apiquery.queryWeather(tag) # data_result: rain float or 0
                     
-                    if (data_result != 0): # <-- If rain, return response for rain
+                    if (data_result): # <-- If rain, return response for rain
                         result = random.choice(i['responses'][0]).format(data_result)
                     else: # <-- Else, return response for no rain
                         result = random.choice(i['responses'][1])
@@ -172,7 +213,80 @@ def get_response(tag, messages):
                     # If there is no rain for the whole week, generate response for no rain for the whole week.
                     else:
                         result = random.choice(i['responses'][3])
+                        
+                elif i['tag'] == 'weatherWeek':
+                    data_result = apiquery.queryWeather(tag)
+                    phrase = random.choice(i['responses'][0]) # first phrase build
+                    for day, data in data_result.items():
+                        print("DS", day)
+                        phrase += " - {}:".format(day)
+                        # Second phrase build
+                        phrase += random.choice(i['responses'][1]).format(
+                            data['avg_temp'],
+                            data['min_temp'],
+                            data['max_temp'],
+                            data['uvi'],
+                            
+                            data['wind_speed'],
+                            data['wind_gust'],
+                            
+                            data['clouds'],
+                            
+                            data['rain_pop'],
+                            data['rain_desc']
+                        )
+                    result = phrase
+                    
+                elif i['tag'] == 'tempWeek':
+                    data_result = apiquery.queryWeather(tag)
+                    phrase = random.choice(i['responses'][0]) # first phrase build
+                    for day, data in data_result.items():
+                        print("DS", day)
+                        phrase += " - {}:".format(day)
+                        # Second phrase build
+                        phrase += random.choice(i['responses'][1]).format(
+                            data['avg_temp'],
+                            data['min_temp'],
+                            data['max_temp']
+                        )
+                    result = phrase
                 
+                elif i['tag'] == 'humidityWeek':
+                    data_result = apiquery.queryWeather(tag)
+                    phrase = random.choice(i['responses'][0]) # first phrase build
+                    for day, data in data_result.items():
+                        print("DS", day)
+                        phrase += " - {}:".format(day)
+                        # Second phrase build
+                        phrase += random.choice(i['responses'][1]).format(
+                            data['humidity']
+                        )
+                    result = phrase   
+                    
+                    result = phrase  
+                elif i['tag'] == 'uviWeek':
+                    data_result = apiquery.queryWeather(tag)
+                    phrase = random.choice(i['responses'][0]) # first phrase build
+                    for day, data in data_result.items():
+                        print("DS", day)
+                        phrase += " - {}:".format(day)
+                        # Second phrase build
+                        phrase += random.choice(i['responses'][1]).format(
+                            data['uvi']
+                        )
+                    result = phrase
+                elif i['tag'] == 'windWeek':
+                    data_result = apiquery.queryWeather(tag)
+                    phrase = random.choice(i['responses'][0]) # first phrase build
+                    for day, data in data_result.items():
+                        print("DS", day)
+                        phrase += " - {}:".format(day)
+                        # Second phrase build
+                        phrase += random.choice(i['responses'][1]).format(
+                            data['wind_speed'],
+                            data['wind_gust']
+                        )
+                    result = phrase       
                 # WEATHER FORECASTING - all data results will be dictionaries, containing day, date, and data returned.
                 # For each intent, the following steps will be executed:
                 
@@ -193,7 +307,7 @@ def get_response(tag, messages):
                     day = extract_day_of_week(message)
                     data_result = apiquery.queryForecast(tag, day)
                     if data_result['rain']: # <-- If rain, return response for rain
-                        result = random.choice(i['responses'][0]).format(data_result['day'], data_result['date'], data_result['rain'])
+                        result = random.choice(i['responses'][0]).format(data_result['day'], data_result['date'], data_result['pop'], data_result['rain'])
                     else: # <-- Else, return response for no rain
                         result = random.choice(i['responses'][1]).format(data_result['day'], data_result['date'])
                         
@@ -211,10 +325,11 @@ def get_response(tag, messages):
                     day = extract_day_of_week(message)
                     data_result = apiquery.queryForecast(tag, day)
                     # Math to convert float to percentage
-                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['avg_temp'], data_result['min_temp'], data_result['max_temp'], data_result['wind_speed'], data_result['wind_gust'], data_result['clouds'], data_result['pop'] * 100)
+                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['avg_temp'], data_result['min_temp'], data_result['max_temp'], data_result['wind_speed'], data_result['wind_gust'], data_result['clouds'], data_result['pop'] * 100, data_result['rain_desc'])
                     
                 elif i['tag'] == 'humidityForecast':
                     day = extract_day_of_week(message)
+                    print(day)
                     data_result = apiquery.queryForecast(tag, day)
                     result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['humidity'])
                     
@@ -224,10 +339,22 @@ def get_response(tag, messages):
                     # Math to convert hPa to inHg
                     data_result['inHg'] = data_result['hPa'] *  0.0295299830714 # Convert hPa to inHg
                     result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['hPa'], data_result['inHg'])
+                    
+                elif i['tag'] == 'tempForecast':
+                    day = extract_day_of_week(message)
+                    data_result = apiquery.queryForecast(tag, day)
+                    # Math to convert hPa to inHg
+                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['avg_temp'], data_result['temp_min'], data_result['temp_max'])
                 
-                elif i['tag'] == 'visibilityForecast':
-                    #day = extract_day_of_week(message)
-                    #data_result = apiquery.queryForecast(tag, day)
+                elif i['tag'] == 'dewForecast':
+                    day = extract_day_of_week(message)
+                    data_result = apiquery.queryForecast(tag, day)
+                    # Math to convert hPa to inHg
+                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['dew_point'])
+                    
+                    
+                    
+                elif i['tag'] == 'contextCurrently' or i['tag'] == "contextWeekly" or i['tag'] == "contextDaily":
                     result = random.choice(i['responses'])
                 # Error handling, generate a random esponse from whatever intent was matched.
                 else:
@@ -249,10 +376,11 @@ def get_response(tag, messages):
 # Using TARS
 # RETURNS: None, prints TARS' fully generated response to console.
 def interact():
+    global context
     print("Waking up TARS....")
     # Wake up tars by sending starting prompts
     messages.append({"role": "user", "content": "hi there"})
-    res = get_response("greetings", messages)
+    res = get_response("gptQuery", messages)
     print("TARS: ", res) # Print response
     # Conversation loop
     while (True):
@@ -273,8 +401,16 @@ def interact():
 # RETURNS: TARS's fully generated response                  
 @app.route('/chat', methods=['POST'])
 def chat():
+    global context
+    global messages
     # Get JSON data from request and correct it with NER
     data = request.get_json()
+    auth_header = request.headers.get('Authorization')
+    print(auth_header)
+    if auth_header != os.getenv("TARS_KEY"):
+        return {"error": "Invalid API key"}, 401
+    if data == "clear":
+        messages = [].append(sys_prompt)  
     message = correct_input(data['prompt'])
     print("Received: ", message)
     print("FINAL MESSAGE",message)
@@ -285,10 +421,16 @@ def chat():
     print("Response: ", response)
     return {"response": response}    
 
+# Get the IP address of the WiFi network interface
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+host = s.getsockname()[0]
+s.close()
 # Execution endpoint
 # app.run() for Flask API, interact() for console interface
 if __name__ == "__main__":
-    #app.run(debug=False)
+    
+    #app.run(host=host, port=8000, debug=False)
     interact()
     
 
