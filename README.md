@@ -13,6 +13,7 @@ Follow the below steps to initialize TARS.
  - run 'python training.py'
  - after successful training, the tars.h5 file should be populated. Uploading and downloading TARS's memory to and from the database can be done with 'python upload.py' and 'python download.py' respectively.
  - 'python tars.py' to run TARS.
+ - Make sure your openweathermap and GPT-3.5 turbo keys are set in the apisource.py module, by replacing {your_api_keys_here}. We are working on having our own api keys in the repo
 # TECHNOLOGIES
 - Python 3
 - Tensorflow 2.10
