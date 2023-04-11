@@ -78,11 +78,12 @@ def predict_class(message):
     #print("MESSAGE:", message, "CLASS:", classes[pred])
     # Get intent 
     intent = get_intent_by_tag(classes[pred])
-    try:
-        context["tag"], context["context"] = intent["context"].split(" ")
-    except:
-        print("No context to set.")
-        context["tag"], context["context"] = "", ""
+    if intent["tag"] not in contexts:
+        try:
+            context["tag"], context["context"] = intent["context"].split(" ")
+        except:
+            print("No context to set.")
+            context["tag"], context["context"] = "", ""
     print("CONTEXT", context)
     if classes[pred] == "contextWeekly" and context.get("context"):
         intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "week" in intent["context"]][0])
