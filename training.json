@@ -3,7 +3,8 @@
     {
       "tag": "gptQuery",
       "patterns": [""],
-      "responses": [""]
+      "responses": [""],
+      "context": "gpt"
     },
     {
       "tag": "name",
@@ -763,8 +764,11 @@
         "When is the sun going down?",
         "What time is the sun setting?",
         "When will the sun set tonight?",
-        "When will the sun set tomorrow?",
+        "What is today's sunset time?",
+        "When is today's sunset?",
+        "Do you know the time of sunset?",
         "What is the sunset time for today?",
+        "What is the sun set time",
         "Can you tell me when the sun will set today?",
         "What is the scheduled time for sunset today?",
         "What is the approximate time for sunset today?",
@@ -811,7 +815,10 @@
         "When is the sun gonna set?",
         "When is the sun gonna set tonight?",
         "When is the sun setting tonight?",
-        "When is the sun gonna set today?"
+        "When is the sun gonna set today?",
+        "When is the sunset time?",
+        "What time is the sunset?",
+        "Can you tell me the sunset time for today?"
       ],
       "responses": [
         "The sun will set today at {}pm.",

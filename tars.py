@@ -58,6 +58,7 @@ messages.append(sys_prompt)
 # RETURNS: intent of the input text
 def predict_class(message):
     global context
+    contexts = ["contextWeekly", "contextForecast", "contextCurrently"]
     message = clean(message) # Clean the sentence
     tokens = tokenizer.texts_to_sequences([message]) # Use Keras tokenizer to convert words to tokens
     tokens = pad_sequences(tokens, maxlen=len(words)) # Pad tokens into vector matrix
@@ -67,9 +68,9 @@ def predict_class(message):
     print(res[0,pred])
     print(classes[pred])
     #print(res[0,pred])
-    if (res[0,pred] < 0.777): # If tars isn't too sure about what the input says
+    if (res[0,pred] < 0.777 or context["context"] == "gpt" and classes[pred] in contexts): # If tars isn't too sure about what the input says
         #try:
-            context["tag"], context["context"] = "", ""
+            context["tag"], context["context"] = "", "gpt"
             return classes[classes.index('gptQuery')] # Set class to 'gptQuery'
                 # ^ This is done to tell TARS to access GPT-3 Neural Network to generate a response
         #except:
@@ -77,21 +78,24 @@ def predict_class(message):
     #print("MESSAGE:", message, "CLASS:", classes[pred])
     # Get intent 
     intent = get_intent_by_tag(classes[pred])
-
     try:
         context["tag"], context["context"] = intent["context"].split(" ")
     except:
         print("No context to set.")
-        
-    print("INTENT", intent["tag"])
+        context["tag"], context["context"] = "", ""
     print("CONTEXT", context)
-    print("TYPE OF CONTEXT", type(context))
-    if classes[pred] == "contextWeekly":
-        classes[pred] = [intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "week" in intent["context"]][0]
-    elif classes[pred] == "contextForecast":
-        classes[pred] = [intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "forecast" in intent["context"]][0]
-    elif classes[pred] == "contextCurrently":
-        classes[pred] = [intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "current" in intent["context"]][0]
+    if classes[pred] == "contextWeekly" and context.get("context"):
+        intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "week" in intent["context"]][0])
+        context["tag"], context["context"] = intent["context"].split(" ")
+        classes[pred] = intent["tag"]
+    elif classes[pred] == "contextForecast" and context.get("context"):
+        intent = intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "forecast" in intent["context"]][0])
+        context["tag"], context["context"] = intent["context"].split(" ")
+        classes[pred] = intent["tag"]
+    elif classes[pred] == "contextCurrently" and context.get("context"):
+        intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "current" in intent["context"]][0])
+        context["tag"], context["context"] = intent["context"].split(" ")
+        classes[pred] = intent["tag"]
     # CONTEXTS : 'forecast', 'week', 'current'
     return classes[pred] # Else, return class 
 
