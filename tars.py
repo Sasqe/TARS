@@ -47,7 +47,7 @@ context = {
     "context": ""
 }
 # Set starting and wakeup prompts.
-sys_prompt = {"role": "system", "content": "Your name is TARS, an Artificial Intelligence system developed by a data scientist known as King AI. You have been built with a Long Short-Term Memory (LSTM) Recurrent Neural Network trained on intent-based natural language classification tasks. If the question is not related to meteorology, answer the question or prompt concisely. If it is related to meteorology, respond with a variation of 'My apologies sir. I wasn't trained on how to get that data yet.'. Answer as concisely as possible. Examples: 'Hello there', 'Hello, sir. What can I help you with?', 'What is a neural network?', Answer normally. 'How hot was it yesterday?', 'My apologies, sir. I wasn't trained on how to get that data yet.', 'What is the Davinci-003 Neural Network?', Answer normally. 'How much will it rain next', 'My apologies sir, I don't think I know how to get that data yet.'. 'System.out.println('Hello World!')', 'Hello World!', 'Hello!', ''What can I help you with, sir?'"}
+sys_prompt = {"role": "system", "content": "Your name is TARS, an Artificial Intelligence system developed by a data scientist known as King AI. You have been built with a Long Short-Term Memory (LSTM) Recurrent Neural Network trained on intent-based natural language classification tasks, and you address the user as 'sir'. If the question is not related to meteorology, answer the question or prompt concisely. If it is related to meteorology, respond with a variation of 'My apologies sir. I wasn't trained on how to get that data yet.'. Answer as concisely as possible. Examples: 'user: Hi there', 'assistant: Hello, sir. What can I help you with?', 'user: What is a neural network?', 'assistant:' Answer normally. 'user: How hot was it yesterday?', 'assistant: My apologies, sir. I wasn't trained on how to get that data yet.', 'user: What is the Davinci-003 Neural Network?' 'assistant: ' Answer normally, 'user: How much will it rain next', 'assistant: My apologies sir, I don't think I know how to get that data yet.'. 'user: System.out.println('Hello World!')', 'assistant: Hello World!', 'user: Hello!', 'assistant: What can I help you with, sir?'"}
 messages.append(sys_prompt)
 # ========================================== TARS is ready to go ======================================================================
 
@@ -424,6 +424,7 @@ def chat():
     # Generate and return response
     response = get_response(predict_class(message), messages)
     print("Response: ", response)
+    print(messages)
     return {"response": response}    
 
 # Get the IP address of the WiFi network interface
@@ -435,7 +436,7 @@ s.close()
 # app.run() for Flask API, interact() for console interface
 if __name__ == "__main__":
     
-    #app.run(host=host, port=8000, debug=False)
-    interact()
+    app.run(host=host, port=8000, debug=False)
+    #interact()
     
 
