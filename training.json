@@ -35,7 +35,11 @@
         "My name is TARS.",
         "I'm TARS, an AI Weatherbot.",
         "My name is TARS, I am an AI Weatherbot.",
-        "You can call me TARS, I am an AI Weatherbot."
+        "You can call me TARS, I am an AI Weatherbot.",
+        "I am known as TARS. I am an AI developed by King AI.",
+        "You can call me TARS.",
+        "Call me TARS.",
+        "I am TARS, an AI Weather system created by King AI."
       ]
     },
     {
@@ -105,10 +109,16 @@
         "What is the dew point reading right now?"
       ],
       "responses": [
-        "The dew point in this area is currently {} Kelvin, or {} degrees Fahrenheit.",
-        "This area's current dew point is {} Kelvin, or {} degrees Fahrenheit.",
-        "In this area, the current dew point is {} Kelvin, or {} degrees Fahrenheit.",
-        "The dew point in this area is currently {} Kelvin, or {} degrees Fahrenheit."
+        "The dew point in this area is currently {} Kelvin, or {}° Fahrenheit.",
+        "This area's current dew point is {} Kelvin, or {}° Fahrenheit.",
+        "In this area, the current dew point is {} Kelvin, or {}° Fahrenheit.",
+        "The dew point in this area is currently {} Kelvin ({}° Fahrenheit).",
+        "My records indicate that the dew point in this area is currently {} Kelvin ({}°F).",
+        "Records indicate a dew level of {} Kelvin ({}°F).",
+        "The current dew level in this area {} Kelvin ({}°F).",
+        "Currently {} Kelvin ({}°F).",
+        "{} Kelvin, or {} degrees Fahrenheit.",
+        "Kelvin: {}\nFahrenheit: {}°F"
       ],
       "context": "dew current"
     },
@@ -133,6 +143,7 @@
         "Can you share the UVI information for my location?",
         "Could you give me the current UVI for my city?",
         "What's the UVI trend?",
+        "What's the uvi like?",
         "Can you provide me with the UVI measurement?",
         "What's the UVI conditions?",
         "Can you give me the UVI update?",
@@ -159,6 +170,7 @@
         "Can you give me the UVI update for my location?",
         "Could you tell me the UVI index for my neighborhood?",
         "What's the UVI like in my city?",
+        "What's the UV index like?",
         "Can you give me the UVI for my street?",
         "What's the UVI for my current location?",
         "Can you tell me the UV index for my city?",
@@ -198,9 +210,13 @@
         "what's the uvi index in this area like currently?"
       ],
       "responses": [
-        "The UV index is currently {}.",
+        "The UV index in this area is currently {}.",
         "Currently, the UV index is {}.",
         "The UV index is {} right now.",
+        "My records indicate a UV index of {}.",
+        "Records indicate a UV index of {}.",
+        "{}.",
+        "Currently, {}.",
         "The current UV index is {}."
       ],
       "context": "uvi current"
@@ -318,7 +334,12 @@
         "The wind in this area is currently blowing at {} mph, from the {}.",
         "The current wind speed in this area is {} mph, from the {}.",
         "Right now, the wind speed in this area is {} mph, from the {}.",
-        "As of now, the wind speed here is at {} mph, from the {}."
+        "As of now, the wind speed here is at {} mph.\nMy records show the current direction from the {}.",
+        "Records indicate wind speeds of up to {} mph, coming from the {}.",
+        "My records indicate winds of up to {} mph, from the {}.",
+        "Wind speeds are currently at around {} mph.\nWinds seem to be coming from the {}.",
+        "Current wind speeds are approximately {} mph, coming from the {}.",
+        "Wind Speed: {} mph.\nWind Direction: {}."
       ],
       "context": "wind current"
     },
@@ -353,9 +374,11 @@
         "is it chilly outside?",
         "how warm is it outside?",
         "how chilly is it outside?",
+        "What's it like outside?",
         "can you give me an update on the temperature?",
         "update me on the temperature",
         "temperature check",
+        "What's it like outside right now?",
         "temperature update",
         "what's the temperature reading?",
         "can you tell me the current temperature outside?",
@@ -448,12 +471,13 @@
         "Is it too chilly to go outside without a jacket?"
       ],
       "responses": [
-        "It is {} degrees in this area.\n However, it currently feels like {} degrees.",
-        "The current temperature in this area is {} degrees.\n Records indicate that it currently feels like {} degrees.",
-        "This area is currently {} degrees.\n Currently, it feels like {} degrees.",
-        "Currently, it is {} degrees in this area.\n You may percieve this as {} degrees.",
-        "The temperature in this area is currently {} degrees.\n Human perception may experience {} degrees.",
-        "The temperature in this area is {} degrees.\n You may currently be experiencing {} degree weather."
+        "It is {}°F in this area.\n It currently feels like {}°F.",
+        "The current temperature in this area is {}°F.\n Records indicate that it currently feels like {}°F.",
+        "This area is currently showing {}°F temperatures.\n Currently, it feels like {} degrees.",
+        "Currently, it is {}°F in this area.\n You may percieve this as {} degrees.",
+        "The temperature in this area is currently {}°F, and feels like {}°F.",
+        "The temperature in this area is {}°F, and feels like {}°F.",
+        "Current: °F\nFeels Like: °F"
       ],
       "context": "temp current"
     },
@@ -542,7 +566,12 @@
         "Give me a weather update"
       ],
       "responses": [
-        "Here is a current weather forecast:\nCurrent temperature: {} degrees.\nUV Index: {}%.\n\nCurrent wind speed: {} mph, from the {}.\nCloud coverage: {}%."
+        "Here is a current weather forecast:\nCurrent temperature: {}°F.\nUV Index: {}.\n\nCurrent wind speed: {} mph., from the {}.\nCloud coverage: {}%.",
+        "Here is a current weather report:\nCurrent temperature: {}°F.\nUV Index: {}.\n\nCurrent wind speed: {} mph., from the {}.\nCloud coverage: {}%.",
+        "I've gathered some data for a current weather report:\nCurrent temperature: {}°F.\nUV Index: {}.\n\nCurrent wind speed: {} mph., from the {}.\nCloud coverage: {}%.",
+        "Current weather:\nCurrent temperature: {}°F.\nUV Index: {}.\n\nCurrent wind speed: {} mph., from the {}.\nCloud coverage: {}%.",
+        "I've created a weather report with some current data:\nCurrent temperature: {}°F.\nUV Index: {}.\n\nCurrent wind speed: {} mph., from the {}.\nCloud coverage: {}%.",
+        "I've gathered some current weather data. Here you go, sir.\nCurrent temperature: {}°F.\nUV Index: {}.\n\nCurrent wind speed: {} mph., from the {}.\nCloud coverage: {}%."
       ],
       "context": "weather current"
     },
@@ -573,7 +602,13 @@
         "What else can you tell me?"
       ],
       "responses": [
-        "I'm an intelligent AI that's been trained to perform meteorological analysis. I am currently capable of analyzing the following: \n 1. Current dew point. \n 2. Current UV Index. \n 3. Current wind speed and direction. \n 4. Current temperature. \n 5. Highest and coldest temperatures today. \n 6. Today's amount of rain. \n . Tonight's sunset time. \n 8. Today's and tomorrow's sunrise time. \n 9. Current humidity level. \n 10. Current visibility. \n 11. Current air pressure. \n 12. I also can perform a daily forecast for any day within the next  days. \n 13. Should you ever find yourself pondering a question that's outside of my realm of knowledge, fear not! I have a secret weapon at my disposal: My Davinci-003 Neural Network."
+        "I can gather weekly, daily, and current weather data, sir.",
+        "I can gather weather data for the humidity, temperature, wind speed, and more.",
+        "Ask me about the weather, sir.",
+        "I was trained to answer questions about the weather, but I can also answer many other questions.",
+        "I can tell you about the weather...\nOr anything else, really.",
+        "I have access to current, daily, and even weekly weather data.\nI can also answer other questions using my secondary neural network.",
+        "It's quite simple, sir.\nPrimary Network: Weather.\nSecondary Network: Anything else."
       ]
     },
     {
@@ -652,10 +687,18 @@
       "responses": [
         [
           "It is currently raining. The forecast is {}.",
-          "There is currently {} outside."
+          "There is currently {}, sir.",
+          "Records currently indicate {}.",
+          "My records currently indicate that there is currently {}.",
+          "Currently, {}."
         ],
         [
-          "It is not currently raining."
+          "It is not currently raining, sir.",
+          "My records indicate no rain.",
+          "Records indicate no rain in this area.",
+          "There is no rain currently.",
+          "It is not currently raining in this area",
+          "There is currently no rain, sir."
         ]
       ],
       "context": "rain current"
@@ -739,16 +782,16 @@
         "When is the next time that it's gonna rain?"
       ],
       "responses": [
-        ["Today, there is a chance of rain expected rain at:"],
-        ["There is no expected rain today."],
-        ["\n \nHere is a rain forecast for the rest of the week:"],
+        ["Today, there is a chance of rain expected rain at:", "It is currently expected to rain today at:", "Records indicate a chance of rain at:"],
+        ["There is no expected rain today.", "There is no rain expected today, sir.", "My records show no chance of rain today, sir.", "Records indicate no chance of rain today, sir."],
+        ["\n \nHere is a rain forecast for the rest of the week:", "\n \nI've gathered a weekly forecast for rain:", "\n \n I've created a weekly rain forecast, sir.", "\n \n Here is a rain forecast for the next 7 days."],
         [
-          "There is no rain expected within the next  days.",
-          "According to my records, there is no expected precipitation in the next  days.",
-          "I looked into the forecast for the next  days, and there doesn't seem to be any expected rain.",
+          "There is no rain expected within the next 7 days.",
+          "According to my records, there is no expected precipitation in the next 7 days.",
+          "I looked into the forecast for the next 7 days, and there doesn't seem to be any expected rain.",
           "According to my weekly forecast, there is no rain expected.",
-          "There is no expected precipitation for the next  days.",
-          "I do not see any expected preciptation forecast for the next  days."
+          "There is no expected precipitation for the next 7 days.",
+          "I do not see any expected preciptation forecast for the next 7 days."
         ]
       ],
       "context": "rain week"
@@ -766,6 +809,8 @@
         "When will the sun set tonight?",
         "What is today's sunset time?",
         "When is today's sunset?",
+        "What is the sunset time?",
+        "What's the time of sunset?",
         "Do you know the time of sunset?",
         "What is the sunset time for today?",
         "Could you tell me what the sunset time is?",
@@ -813,6 +858,7 @@
         "When will the day's end arrive?",
         "What is the expected sun set time?",
         "What is today's sunset time?",
+        "What's the sunset time?",
         "Can you tell me what today's sunset time is?",
         "When is the sun gonna set?",
         "When is the sun gonna set tonight?",
@@ -827,12 +873,16 @@
         "Today's sunset is at {}pm.",
         "The time of today's sunset is at {}pm.",
         "Today, the sunset time is {}pm.",
-        "The sun will set today at about {}pm."
+        "The sun will set today at about {}pm.",
+        "{} pm.",
+        "The sun will set today at approximately {}pm."
       ]
     },
     {
       "tag": "dailySunrise",
       "patterns": [
+        "What's the sunrise time?",
+        "What is the sunrise time?",
         "What time is the sunrise tomorrow?",
         "When does the sun come up tomorrow?",
         "When is the next sunrise?",
@@ -916,6 +966,7 @@
         "When can I watch the sunrise at my location?",
         "What time does the sun rise in my area?",
         "When will the sun rise in my area?",
+        "What's the sunrise time?",
         "What time will the sunrise be in my area?",
         "When can I see the sunrise in my area?",
         "What time is the sunrise at this location?",
@@ -940,7 +991,11 @@
         "At what time will the sun rise?"
       ],
       "responses": [
-        "Today, the sun rose at {}am.\n Tommorrow, the sun will rise at {}am."
+        "Today, the sun rose at {}am.\nTommorrow, the sun will rise at {}am.",
+        "Today: {}am.\nTommorrow: {}am.",
+        "Today's sunrise occured at {} am.\nTommorrow's sunrise will occur at {} am.",
+        "Today, the sun rose at {}am.\nThe next sunrise will be at {}am.",
+        "Today's sunrise: {}am.\nTomorrow's sunrise: {}am."
       ]
     },
     {
@@ -1049,7 +1104,7 @@
         "What is the humidity forecast like?",
         "What is the current humidity report?"
       ],
-      "responses": ["The current humidity in this area is {}%."],
+      "responses": ["The current humidity in this area is {}%.", "There is currently a humidity level of about {}%, sir.", "Current humidity levels are at about {}%", "My records show a humidity level of {} percent.", "There's currently {}% humidity in this area.", "{}%.", "Currently, {}%."],
       "context": "humidity current"
     },
     {
@@ -1057,6 +1112,7 @@
       "patterns": [
         "Are you able to give me an air pressure report for this area?",
         "What's the current air pressure?",
+        "What's the air pressure like?",
         "Can you tell me the air pressure right now?",
         "I'm curious about the air pressure. What is it?",
         "What's the air pressure reading at the moment?",
@@ -1071,6 +1127,8 @@
         "Can you give me the current atmospheric pressure?",
         "I'm interested in knowing the current atmospheric pressure. What is it?",
         "What's the current pressure of the air?",
+        "What's the air pressure right now?",
+        "What's the air pressure like currently?",
         "Can you give me the current air pressure?",
         "I'm curious about the air pressure. What is it right now?",
         "What's the pressure of the air at the moment?",
@@ -1163,7 +1221,7 @@
         "What's the current pressure reading like?"
       ],
       "responses": [
-        "The current air pressure is about {} hPa, or {} inHg (inches of mercury)."
+        "The current air pressure is about {} hPa, or {} inHg (inches of mercury).", "Records indicate a measured air pressure of about {} hPa ({} inHg).", "My records show an air pressure of {} hPa ({} inHg).", "{} hPa ({} inHg)."
       ],
       "context": "pressure current"
     },
@@ -1171,6 +1229,8 @@
       "tag": "currentVisibility",
       "patterns": [
         "What's the current visibility like?",
+        "What's the visibility like right now?",
+        "What is the visibility like right now?",
         "What is the current visibility reading?",
         "How far can you see right now?",
         "What's the current distance you can see?",
@@ -1184,6 +1244,7 @@
         "Can you tell me the visibility range in this area?",
         "Do you know what the visibility forecast is?",
         "How far can I see right now?",
+        "What's the visibility for right now?",
         "What is the visibility range at the moment?",
         "What is the current level of atmospheric clarity?",
         "What is the current atmospheric transparency?",
@@ -1255,17 +1316,8 @@
         "How well can you see through the air?",
         "What's the current level of atmospheric haze?",
         "What's the current atmospheric visibility range in kilometers?",
-        "What's the current atmospheric visibility range in miles?",
-        "What's the current atmospheric clarity range in kilometers?",
-        "What's the current atmospheric clarity range in miles?",
-        "What's the current atmospheric obscurity range in kilometers?",
-        "What's the current atmospheric obscurity range in miles?",
-        "What's the current atmospheric transparency range in kilometers?",
-        "What's the current atmospheric transparency range in miles?",
-        "What's the current atmospheric haze range in kilometers?",
-        "What's the current atmospheric haze range in miles?",
-        "What's the current atmospheric pollution range in kilometers?",
-        "What's the current atmospheric pollution range in miles?",
+        "What's the current visibility like?",
+        "What's the visibility forecast right now?",
         "What is the current level of atmospheric smaze?",
         "What is the current level of atmospheric fume?",
         "Can you tell me the current visibility in this area?",
@@ -1284,7 +1336,11 @@
         "The current visibility in the surrounding area is approximately {} miles.",
         "The visibility in this area is currently {} miles.",
         "In this area, I can measure the visibility at about {} miles.",
-        "In this area, you can currently see up to about {} miles."
+        "In this area, you can currently see up to about {} miles.",
+        "My records show a visibility range of up to {} miles.",
+        "The current visibility in this area is approximately {} miles.",
+        "Currently, the visibility in this area is about {} miles.",
+        "Records indicate a current visibility range of up to {} miles."
       ],
       "context": "visibility current"
     },
@@ -1363,7 +1419,7 @@
         "What will the uvi index be like on saturday?",
         "Can you tell me the UV index for the day after tomorrow?",
         "What does the uvi index look like for this thursday?",
-        "Whats the uvi index for tuesday?",
+        "What's the uvi index for tuesday?",
         "What is the forecasted uvi index for tomorrow?",
         "What is the uv index for tomorrow?",
         "what is tomorrow's uvi?",
@@ -1417,7 +1473,7 @@
         "Can you predict the UVI index for tomorrow?",
         "Can you tell me the UV index for today?",
         "What does the uvi index look like today?",
-        "Whats the uvi index today?",
+        "What's the uvi index today?",
         "What is the uv index today?",
         "What is the UV forecast for the day?",
         "What will the UV index be like today?",
@@ -1426,7 +1482,7 @@
         "Can you tell me the UVI index for today?"
 
       ],
-      "responses": ["The UVI Index for {} ({}) is {}."],
+      "responses": ["The UVI Index for {} ({}) is {}.", "{}'s ({}) UV index record is {}.", "My records indicate the UV index for {} ({}) at {}.", "The UV index for {} ({}) is expected to be about {}.", "The average UV index for {} ({}) is {}.", "{} ({}):\n UV Index: {}."],
       "context": "uvi forecast"
     },
     {
@@ -1565,7 +1621,7 @@
         "How fast will the wind blow today?"
 
       ],
-      "responses": ["The wind forecast for {} ({}) is {} mph."],
+      "responses": ["The wind forecast for {} ({}) is {} mph.", "My records for {} ({}) show wind speeds of up to {} mph.", "Wind speeds on {} ({}) are expected to average {} mph.", "The average wind speed for {} ({}) is {}.", "The wind forecast for {} ({}) is {} mph.", "Wind speeds for {} ({}) will average {} mph.", "{} ({}):\n Winds: {}mph."],
       "context": "wind forecast"
     },
     {
@@ -1742,8 +1798,8 @@
         "Did rain fall today?"
       ],
       "responses": [
-        ["For {} ({}), there is a {}% chance for {} inches of rainfall."],
-        ["There is no rain expected on {} ({})."]
+        ["For {} ({}), there is a {}% chance for {} inches of rainfall.", "The chance of rain for {} ({}) is {}%, for {} inches.", "For {} ({}), there is a {}% chance and expected {} inches of rain.", "{} ({}):\n Chance of rain: {}%.\n Rainfall: {} inches."],
+        ["There is no rain expected on {} ({}).", "There is no chance of rain for {} ({}).", "The chance of rain for {} ({}) is 0%.", "There is no rain forecasted for {} ({}).", "{} ({}):\n Chance of rain: 0%.\n Rainfall: 0 inches."]
       ],
       "context": "rain forecast"
     },
@@ -1913,12 +1969,12 @@
         "How hot will it get on thursday?",
         "How hot is it gonna get on friday?",
         "How hot will it get on saturday?",
-        "How hot is it gonna get on sunday?",
+        "How hot is it going get on sunday?",
         "How hot will it get tomorrow?",
         "How hot is it gonna get today?",
-        "How hot is it gonna get tomorrow?"
+        "How hot is it going to get tomorrow?"
       ],
-      "responses": ["The high for {} ({}) is {} degrees."],
+      "responses": ["The high for {} ({}) is {} degrees.", "The daily high for {} ({}) is {}°F.", "The high for {} ({}) is {}°F.", "{} ({}):\n High Temperature: {}°F.", "The high temperature forecast for {} ({}) is {}°F.", "{}'s ({}) high is {}°F.", "Temperatures on {} ({}) will get up to {}°F.", "Temperatures on {} ({}) are expected to get up to {}°F."],
       "context": "high forecast"
     },
     {
@@ -2045,6 +2101,8 @@
         "How cold will it get today?",
         "How cold will it get tomorrow?",
         "How cold will it get on monday?",
+        "How low is it gonna get on wednesday?",
+        "How low is it gonna get tomorrow?",
         "What is the minimum temperature for Thursday?",
         "What is the expected minimum temperature on Thursday?",
         "What is the projected low for Thursday?",
@@ -2060,9 +2118,11 @@
         "What is the minimum temperature for Saturday?",
         "What is the expected minimum temperature on Saturday?",
         "What is the projected low for Saturday?",
-        "What's the chill factor on Saturday?"
+        "What's the chill factor on Saturday?",
+        "How cold is it gonna get on tuesday?",
+        "How cold is it gonna get tomorrow?"
       ],
-      "responses": ["The low for {} ({}) is {} degrees."],
+      "responses": ["The low for {} ({}) is {} degrees.", "The daily low for {} ({}) is {}°F.", "The low for {} ({}) is {}°F.", "{} ({}):\n Low Temperature: {}°F.", "The low temperature forecast for {} ({}) is {}°F.", "{}'s ({}) low is {}°F.", "Temperatures on {} ({}) will get down to {}°F.", "Temperatures on {} ({}) are expected to get down to {}°F."],
       "context": "low forecast"
     },
     {
@@ -2178,7 +2238,11 @@
         "Is the weather on thursday gonna be nice?"
       ],
       "responses": [
-        "Here is a weather forecast for {} ({}):\nAverage temperature: {} degrees.\nLow: {} degrees.\nHigh: {} degrees.\n\nAverage wind speed: {} mph. with gusts up to {} mph.\nCloud coverage: {}%\nPrecipitation: {}% chance of {}"
+        "Here is a weather forecast for {} ({}):\nAverage temperature: {} degrees.\nLow: {} degrees.\nHigh: {} degrees.\n\nAverage wind speed: {} mph. with gusts up to {} mph.\nCloud coverage: {}%\nPrecipitation: {}% chance of {}",
+        "I've created a weather forecast for {} ({}):\nAverage temperature: {} degrees.\nLow: {} degrees.\nHigh: {} degrees.\n\nAverage wind speed: {} mph. with gusts up to {} mph.\nCloud coverage: {}%\nPrecipitation: {}% chance of {}",
+        "I've gathered some weather data for {} ({}):\nAverage temperature: {} degrees.\nLow: {} degrees.\nHigh: {} degrees.\n\nAverage wind speed: {} mph. with gusts up to {} mph.\nCloud coverage: {}%\nPrecipitation: {}% chance of {}",
+        "Here's a weather report for {} ({}):\nAverage temperature: {} degrees.\nLow: {} degrees.\nHigh: {} degrees.\n\nAverage wind speed: {} mph. with gusts up to {} mph.\nCloud coverage: {}%\nPrecipitation: {}% chance of {}",
+        "I've collected some data for {}'s ({}) weather report:\nAverage temperature: {} degrees.\nLow: {} degrees.\nHigh: {} degrees.\n\nAverage wind speed: {} mph. with gusts up to {} mph.\nCloud coverage: {}%\nPrecipitation: {}% chance of {}"
       ],
       "context": "weather forecast" 
     },
@@ -2279,7 +2343,7 @@
         "Is it gonna be humid next wednesday?",
         "What's the humidity going to be for the day?"
       ],
-      "responses": ["The average humidity level for {} ({}) is {}%."],
+      "responses": ["The humidity level for {} ({}) is {}%.", "The humidity for {} ({}) is {}%.", "The average humidity for {} ({}) is {} percent.", "{} ({}):\n Humidity: {}%.", "The humidity forecast for {} ({}) is {}%.", "{}'s ({}) humidity is {}%.", "Humidity levels on {} ({}) will be about to {}%.", "Humidity levels on {} ({}) are expected to be about {}%."],
       "context": "humidity forecast"
     },
     {
@@ -2362,7 +2426,7 @@
         "What's the average air pressure for today?"
       ],
       "responses": [
-        "The average air pressure for {} ({}) is {} hPa, or {} inHg (inches of mercury)."
+        "The average air pressure for {} ({}) is {} hPa, or {} inHg (inches of mercury).", "Air pressure records for {} ({}) measure at {} hPa ({} inHg).", "The air pressure for {} ({}) is {} hPa ({} inHg).", "The average air pressure for {} ({}) is {} hPa ({} inHg).", "{} ({}):\n Air pressure: {} hPa ({} inHg).", "The air pressure forecast for {} ({}) is {} hPa ({} inHg).", "{}'s ({}) air pressure is {} hPa ({} inHg).", "Air pressure on {} ({}) will be about to {} hPa ({} inHg).", "Air pressure on {} ({}) is expected to be about {} hPa ({} inHg)."
       ],
       "context": "pressure forecast"
     },
@@ -2468,7 +2532,7 @@
         "How hot is it going to be on tuesday?"
       ],
       "responses": [
-        "The average temperature for {} ({}) is {} degrees, with a low of {} degrees and a high of {} degrees."
+        "The temperature for {} ({}) is {} degrees.", "The daily temperature for {} ({}) is {}°F.", "The temperature for {} ({}) is {}°F.", "{} ({}):\n Average temperature: {}°F.", "The temperature forecast for {} ({}) is {}°F.", "{}'s ({}) temperature is {}°F.", "Temperatures on {} ({}) will be around {}°F.", "Temperatures on {} ({}) are expected to be around {}°F."
       ],
       "context": "temp forecast"
     },
@@ -2558,7 +2622,7 @@
         "Can you tell me the dew forcast for sunday?"
       ],
       "responses": [
-        "The dew point for {} ({}) is {}."
+        "The dew point for {} ({}) is {} Kelvin ({}°F).", "The dew point level for {} ({}) is {} Kelvin ({}° Fahrenheit).", "{}'s ({}) dew point is {} Kelvin ({}°F).", "{} ({}):\n Dew Point: {} Kelvin ({}°F).", "The dew point forecast for {} ({}) is {} Kelvin, or {}°F.", "{}'s ({}) average dew point is {} Kelvin ({}°F).", "The dew point on {} ({}) will be around {} Kelvin, or {}°F.", "The dew point for {} ({}) is expected to be around {} Kelvin ({}°F)."
       ],
       "context": "dew forecast"
     },
@@ -2666,9 +2730,9 @@
         "Do you know the weekly weather?"
       ],
       "responses": [
-        ["Here is a weather forecast for the next  days:\n"],
+        ["Here is a weather forecast for the next 7 days:\n", "I've created a weather forecast for the upcoming week:\n", "I've collected some data for a weekly forecast:\n", "Here is a weekly weather forecast:\n", "I've gathered some weather data for the next 7 days. Here you go, sir.\n"],
         [
-          "\n     Average temperature: {}%.\n     Low: {}%.\n     High: {}%.\n     Average UVI: {}%.\n\n     Average Wind Speed: {}mph., with gusts up to {}.\n     Average cloud coverage: {}%.\n\n     Precipitation: {}% chance of {}.\n\n"
+          "\n     Average temperature: {}°F.\n     Low: {}°F.\n     High: {}°F.\n     Average UVI: {}.\n\n     Average Wind Speed: {}mph., with gusts up to {}.\n     Average cloud coverage: {}%.\n\n     Precipitation: {}% chance of {}.\n\n"
         ]
       ],
       "context": "weather week"
@@ -2680,8 +2744,12 @@
         "What's the temperature gonna be like for the rest of the week?",
         "How hot is it gonna be this week?",
         "How cold is it gonna be this week?",
+        "How hot is it this week?",
+        "How cold is it this week?",
         "How hot is it going to be for the rest of this week?",
         "How cold is it going to be this week?",
+        "How hot is it going to be this week?",
+        "What's the temperature like this week?",
         "How hot is it going to be for the next  days?",
         "How cold is it going to be for the next  days?",
         "What's the average temperature going to be for the next  days?",
@@ -2740,16 +2808,21 @@
         "What is the estimated average temperature for the next week?",
         "What is the average temperature for the remaining days of the week?",
         "What's the temperature look like this week?",
+        "What is the temperature going to be like this week?",
         "Can you give me a weekly temperature report?",
         "What's the weekly temperature report like?",
         "Do you know the weekly temperature?",
         "Tell me the the weekly temperature forecast?",
-        "Can you give me the weekly temperature?"
+        "How hot is it getting this week?",
+        "How cold is it getting this week?",
+        "Can you give me the weekly temperature?",
+        "What's the temperature like this week?",
+        "What is the temperature like this week?"
       ],
       "responses": [
-        ["Here is a temperature forecast for the next  days:\n"],
+        ["Here is a temperature forecast for the next 7 days:\n", "I've went and gathered some data for this week's temperatures\n", "I've created a temperature report for the next 7 days:\n", "I've gathered the temperature data for the rest of this week. Here you go, sir.\n"],
         [
-          "\n     Average temperature: {}%.\n     Low: {}%.\n     High: {}%.\n\n"
+          "\n     Average temperature: {}°F.\n     Low: {}°F.\n     High: {}°F.\n\n"
         ]
       ],
       "context": "temp week"
@@ -2812,7 +2885,7 @@
         "What's the estimated humidity levels for the next  days?"
       ],
       "responses": [
-        ["Here is a humidty forecast for the next  days:\n"],
+        ["Here is a humidty forecast for the next 7 days:\n", "I've gathered the humidity forecasts for the next 7 days. Here you go, sir.\n", "Here is the humidity report for the next week:\n", "I've created a report on the humidity levels for the next 7 days:\n", "I've gathered the humidity level data for the next week:\n", "I've looked into the humidity levels for the next week, and made a report:\n"],
         [
           "\n     Average humidity: {}%.\n\n"
         ]
@@ -2892,7 +2965,7 @@
         "What's the UVI forecast for the next  days?"
       ],
       "responses": [
-        ["Here is a UV index forecast for the next  days:\n"],
+        ["Here is a UV index forecast for the next 7 days:\n", "I've gathered the UV index forecast for the next 7 days. Here you go, sir.\n", "Here is the UV index report for the next week:\n", "I've created a report on the UVI for the next 7 days:\n", "I've gathered the UV index data for the next week:\n", "I've looked into the UV index for the next week, here is a report:\n"],
         [
           "\n     Daily UVI : {}%.\n\n"
         ]
@@ -2968,7 +3041,7 @@
         "How's the wind forecast for this week?"
       ],
       "responses": [
-        ["Here is a wind forecast for the next  days:\n"],
+        ["Here is a wind forecast for the next 7 days:\n", "I've gathered the wind forecast for the next week. Here you go, sir.\n", "Here is the wind report for the next 7 days:\n", "I've created a report on the wind speeds for the next 7 days:\n", "I've gathered the wind data for the next 7 days:\n", "I've went ahead and created a wind report for the next 7 days:\n"],
         [
           "\n     Wind speed: {}mph., with gusts up to {}mph.\n\n"
         ]
@@ -3066,7 +3139,10 @@
         "How about for the next few days?"
       ],
       "responses": [
-        "I'm sorry. Could you provide more context?"
+        "I'm sorry. Could you provide more context?",
+        "My apologies, sir. Could you provide more context?",
+        "Could you please provide more context, sir?",
+        "Sorry, sir. Could you give some context?"
       ]
     },
     {
@@ -3113,7 +3189,6 @@
         "What about tomorrow?",
         "And tomorrow?",
         "And for the rest of today?",
-        "What about for tomorrow?",
         "And for tomorrow?",
         "How about for tomorrow?",
         "Now for monday",
@@ -3140,6 +3215,7 @@
         "And for sunday?",
         "What about for tuesday?",
         "And for tuesday?",
+        "What about for tomorrow?",
         "How about for tuesday?",
         "Now a forecast for tuesday",
         "What about a forecast for friday?",
@@ -3180,7 +3256,10 @@
         "How about for the day?"
       ],
       "responses": [
-        "I'm sorry. Could you provide more context?"
+        "I'm sorry. Could you provide more context?",
+        "My apologies, sir. Could you provide more context?",
+        "Could you please provide more context, sir?",
+        "Sorry, sir. Could you give some context?"
       ]
     },
     {
@@ -3228,7 +3307,10 @@
         "What about a current report"
       ],
       "responses": [
-        "I'm sorry. Could you provide more context?"
+        "I'm sorry. Could you provide more context?",
+        "My apologies, sir. Could you provide more context?",
+        "Could you please provide more context, sir?",
+        "Sorry, sir. Could you give some context?"
       ]
     }
   ]

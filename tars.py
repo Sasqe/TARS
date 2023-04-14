@@ -64,7 +64,7 @@ def predict_class(message):
     tokens = pad_sequences(tokens, maxlen=len(words)) # Pad tokens into vector matrix
     res = model.predict(np.array(tokens), verbose=0) # TARS makes its prediction by passing the tokens to it
     pred = np.argmax(res) # Get the index of the highest probabilit
-
+    print(tokens)
     print(res[0,pred])
     print(classes[pred])
     #print(res[0,pred])
@@ -85,18 +85,21 @@ def predict_class(message):
             print("No context to set.")
             context["tag"], context["context"] = "", ""
     print("CONTEXT", context)
-    if classes[pred] == "contextWeekly" and context.get("context"):
-        intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "week" in intent["context"]][0])
-        context["tag"], context["context"] = intent["context"].split(" ")
-        classes[pred] = intent["tag"]
-    elif classes[pred] == "contextForecast" and context.get("context"):
-        intent = intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "forecast" in intent["context"]][0])
-        context["tag"], context["context"] = intent["context"].split(" ")
-        classes[pred] = intent["tag"]
-    elif classes[pred] == "contextCurrently" and context.get("context"):
-        intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "current" in intent["context"]][0])
-        context["tag"], context["context"] = intent["context"].split(" ")
-        classes[pred] = intent["tag"]
+    try:
+        if classes[pred] == "contextWeekly" and context.get("context"):
+            intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "week" in intent["context"]][0])
+            context["tag"], context["context"] = intent["context"].split(" ")
+            classes[pred] = intent["tag"]
+        elif classes[pred] == "contextForecast" and context.get("context"):
+            intent = intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "forecast" in intent["context"]][0])
+            context["tag"], context["context"] = intent["context"].split(" ")
+            classes[pred] = intent["tag"]
+        elif classes[pred] == "contextCurrently" and context.get("context"):
+            intent = get_intent_by_tag([intent["tag"] for intent in intents if "context" in intent and context.get("tag") in intent["context"] and "current" in intent["context"]][0])
+            context["tag"], context["context"] = intent["context"].split(" ")
+            classes[pred] = intent["tag"]
+    except:
+        print("No context found.")
     # CONTEXTS : 'forecast', 'week', 'current'
     return classes[pred] # Else, return class 
 
@@ -355,7 +358,7 @@ def get_response(tag, messages):
                     day = extract_day_of_week(message)
                     data_result = apiquery.queryForecast(tag, day)
                     # Math to convert hPa to inHg
-                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['dew_point'])
+                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['dew_point'], "{:.2f}".format(data_result['dew_point'] * 9 / 5 - 459.67))
                     
                     
                     
@@ -427,15 +430,14 @@ def chat():
     print(messages)
     return {"response": response}    
 
-# Get the IP address of the WiFi network interface
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-s.connect(("8.8.8.8", 80))
-host = s.getsockname()[0]
-s.close()
 # Execution endpoint
 # app.run() for Flask API, interact() for console interface
 if __name__ == "__main__":
-    
+        # Get the IP address of the WiFi network interface
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    host = s.getsockname()[0]
+    s.close()
     app.run(host=host, port=8000, debug=False)
     #interact()
     

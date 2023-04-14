@@ -10,7 +10,6 @@ from keras.layers import Dense, Dropout, Embedding, LSTM, LeakyReLU, BatchNormal
 from keras import optimizers, regularizers
 from keras.preprocessing.text import Tokenizer
 from keras.utils import np_utils, pad_sequences
-from tarsDAO import AIDAO
 import h5py
 from sklearn.model_selection import KFold
 import tensorflow as tf
@@ -41,7 +40,7 @@ lemmatizer = WordNetLemmatizer()
 # reading the json.intense file
 intents = json.loads(open("training.json", encoding="utf8").read()) 
 # Define Nadam optimizer. This optimizer works best for TARS' Long Short-Term Memory (LSTM) network.
-Nadam = optimizers.Nadam(learning_rate=0.001, clipvalue=1.0, beta_1=0.9, beta_2=0.999, epsilon=1e-07, name='Nadam')
+Nadam = optimizers.Nadam(learning_rate=0.0007, clipvalue=1.0, beta_1=0.9, beta_2=0.999, epsilon=1e-07, name='Nadam')
 
 # Function to built TARS ( NEURAL NETWORK ARCHITECTURE )
 # Using Tensorflow, Keras
@@ -56,12 +55,13 @@ def reinit(model):
     print("NEURAL NET WORDS")
     print(len(words))
     model.add(Embedding(tokenizer_vocab_size,32,input_length=len(words))) # Embedding layer to process embedding vectors
-    model.add(LSTM(20, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
+    model.add(LSTM(28, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
     model.add(BatchNormalization()) # Batch normalization layer
-    model.add(Dense(128, kernel_regularizer=regularizers.l2(0.2), kernel_initializer='variance_scaling')) # First Dense at 128 neurons. Drop this layer out.
+    model.add(Dense(128, kernel_regularizer=regularizers.l2(0.3), kernel_initializer='he_uniform')) # First Dense at 128 neurons. Drop this layer out.
+    model.add(BatchNormalization()) # Batch normalization layer
     model.add(LeakyReLU(alpha=0.01))
     model.add(Dropout(0.1))
-    model.add(Dense(64, kernel_regularizer=regularizers.l2(0.2))) # Second Dense at 64 neurons. Don't drop this layer out.
+    model.add(Dense(64, kernel_regularizer=regularizers.l2(0.3), kernel_initializer='he_uniform')) # Second Dense at 64 neurons. Don't drop this layer out.
     model.add(LeakyReLU(alpha=0.01))
     model.add(Dense(len(classes), 
                         activation='softmax')) # Last Dense with one neuron for each class to make a prediction on. Softmax activation function.
@@ -81,6 +81,8 @@ scores = [] # Initialize a list to store the evaluation metrics
 # PARAMETERS: Model
 # RETURNS: Tars Model with best scores
 def train(model):
+  # Define a callback for early stopping. Early stop will stop training if the model stops improving.
+    early_stop = EarlyStopping(monitor='val_accuracy', patience=10, mode='max',  min_delta=0.01,verbose=1,restore_best_weights=True)    
     num_folds = 5 # Number of folds, we'll use 5
     best_score = float('-inf')
     
@@ -95,7 +97,7 @@ def train(model):
         y_train, y_test = train_y[train_index], train_y[test_index]
                 
         # Train TARS on current fold.   
-        hist = model.fit(x_train, y_train, epochs=30, batch_size=5, callbacks=[EarlyStopping(monitor='val_loss', patience=3, min_delta=0.0001)], validation_data=(x_test, y_test))
+        hist = model.fit(x_train, y_train, epochs=30, batch_size=7, callbacks=early_stop, validation_data=(x_test, y_test))
         
         # Evaluate the model on the test data for this fold
         score = model.evaluate(x_test, y_test, verbose=0)
@@ -169,8 +171,6 @@ with h5py.File('tars.h5', 'r') as tars:
         print("TARS MEMORY NOT FOUND. RE-CREATING NEURAL NETWORK...")
         model = reinit(0)
 
-# Define a callback for early stopping. Early stop will stop training if the model stops improving.
-early_stop = EarlyStopping(monitor='val_accuracy', patience=10, mode='max',  min_delta=0.01,verbose=1,restore_best_weights=True)
 # Activate training
 try:
     tars = train(model) # Train TARS
