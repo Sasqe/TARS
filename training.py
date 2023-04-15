@@ -40,7 +40,7 @@ lemmatizer = WordNetLemmatizer()
 # reading the json.intense file
 intents = json.loads(open("training.json", encoding="utf8").read()) 
 # Define Nadam optimizer. This optimizer works best for TARS' Long Short-Term Memory (LSTM) network.
-Nadam = optimizers.Nadam(learning_rate=0.0008, clipvalue=1.0, beta_1=0.9, beta_2=0.999, epsilon=1e-07, name='Nadam')
+Nadam = optimizers.Nadam(learning_rate=0.001, clipvalue=1.0, beta_1=0.9, beta_2=0.999, epsilon=1e-07, name='Nadam')
 
 # Function to built TARS ( NEURAL NETWORK ARCHITECTURE )
 # Using Tensorflow, Keras
@@ -55,12 +55,12 @@ def reinit(model):
     print("NEURAL NET WORDS")
     print(len(words))
     model.add(Embedding(tokenizer_vocab_size,32,input_length=len(words))) # Embedding layer to process embedding vectors
-    model.add(LSTM(28, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
+    model.add(LSTM(25, kernel_initializer='he_uniform', recurrent_initializer='he_uniform')) # LSTM Layer. Scale neurons with size of training set.
     model.add(BatchNormalization()) # Batch normalization layer
     model.add(Dense(128, kernel_regularizer=regularizers.l2(0.3), kernel_initializer='variance_scaling')) # First Dense at 128 neurons. Drop this layer out.
     model.add(BatchNormalization()) # Batch normalization layer
     model.add(LeakyReLU(alpha=0.01))
-    model.add(Dropout(0.1))
+    model.add(Dropout(0.3))
     model.add(Dense(64, kernel_regularizer=regularizers.l2(0.3), kernel_initializer='variance_scaling')) # Second Dense at 64 neurons. Don't drop this layer out.
     model.add(LeakyReLU(alpha=0.01))
     model.add(Dense(len(classes), 
@@ -85,7 +85,7 @@ def train(model):
     early_stop = EarlyStopping(monitor='val_accuracy', patience=10, mode='max',  min_delta=0.01,verbose=1,restore_best_weights=True)    
     num_folds = 5 # Number of folds, we'll use 5
     best_score = float('-inf')
-    
+    best_loss = float('inf')
     tars = None
     # K-Fold Cross Validator comes from Sklearn
     kf = KFold(n_splits=num_folds, shuffle=True, random_state=42)
@@ -103,10 +103,12 @@ def train(model):
         score = model.evaluate(x_test, y_test, verbose=0)
         scores.append(score)
     # Update tars and best score with best score
-        if float(score[1]) > best_score:
+        if float(score[0]) < best_loss:
             best_score = float(score[1])
+            best_loss = float(score[0])
             tars = hist
     print("BEST SCORE", best_score)
+    print("BEST LOSS", best_loss)
     return tars
 # creating empty lists to store data: words, intents, documents, and ignore letters
 words = []

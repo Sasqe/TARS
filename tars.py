@@ -320,15 +320,19 @@ def get_response(tag, messages):
                         result = random.choice(i['responses'][1]).format(data_result['day'], data_result['date'])
                         
                 elif i['tag'] == 'highTempForecast':
+                  try:
                     day = extract_day_of_week(message)
                     data_result = apiquery.queryForecast(tag, day)
-                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['high_temp'])
-                    
+                    result = random.choice(i['responses'][0]).format(data_result['day'], data_result['date'], data_result['high_temp'])
+                  except:
+                    result = random.choice(i['responses'][1])
                 elif i['tag'] == 'lowTempForecast':
+                  try:
                     day = extract_day_of_week(message)
                     data_result = apiquery.queryForecast(tag, day)
-                    result = random.choice(i['responses']).format(data_result['day'], data_result['date'], data_result['low_temp'])
-                    
+                    result = random.choice(i['responses'][0]).format(data_result['day'], data_result['date'], data_result['low_temp'])
+                  except:
+                    result = random.choice(i['responses'][1])
                 elif i['tag'] == 'weatherForecast':
                     day = extract_day_of_week(message)
                     data_result = apiquery.queryForecast(tag, day)
@@ -373,11 +377,12 @@ def get_response(tag, messages):
                 break
             # If there is any error, return error response
             except Exception as e:
-                result = "Oops, I wasn't able to get that data."
+                result = "My apologies, sir. I seem to be experiencing connection issues."
                 # Append the response to the message history
                 messages.append({"role": "assistant", "content": result})
                    # Associate a traceback object with the exception
                 print(e.with_traceback())
+                return result
     return result
 
 # Function for CONSOLE INTERFACE
@@ -434,11 +439,11 @@ def chat():
 # app.run() for Flask API, interact() for console interface
 if __name__ == "__main__":
         # Get the IP address of the WiFi network interface
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(("8.8.8.8", 80))
-    host = s.getsockname()[0]
-    s.close()
-    app.run(host=host, port=8000, debug=False)
-    #interact()
+    # s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    # s.connect(("8.8.8.8", 80))
+    # host = s.getsockname()[0]
+    # s.close()
+    #app.run(host='0.0.0.0', port=8000, debug=False)
+    interact()
     
 
