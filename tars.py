@@ -68,7 +68,7 @@ def predict_class(message):
     print(res[0,pred])
     print(classes[pred])
     #print(res[0,pred])
-    if (res[0,pred] < 0.777 or context["context"] == "gpt" and classes[pred] in contexts): # If tars isn't too sure about what the input says
+    if (res[0,pred] < 0.83 or context["context"] == "gpt" and classes[pred] in contexts): # If tars isn't too sure about what the input says
         #try:
             context["tag"], context["context"] = "", "gpt"
             return classes[classes.index('gptQuery')] # Set class to 'gptQuery'
@@ -443,7 +443,7 @@ if __name__ == "__main__":
     # s.connect(("8.8.8.8", 80))
     # host = s.getsockname()[0]
     # s.close()
-    #app.run(host='0.0.0.0', port=8000, debug=False)
-    interact()
+    app.run(host='0.0.0.0', port=8000, debug=False)
+    #interact()
     
 

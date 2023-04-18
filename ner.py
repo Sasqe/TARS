@@ -89,7 +89,7 @@ def correct_input(input_text):
 # RETURNS: array of tokens
 def clean(sentence):
     lemmatizer = WordNetLemmatizer() # Create NLTK Lemmatizer to lemmatize words
-    ignore_letters = ["?", "!", ".", ",", "'", ":", ";", "(",")", "-", "_"] # List of characters to ignore
+    ignore_letters = ["?", "!", ".", ",", "'", ":", ";", "(",")", "-", "_", "<", ">"] # List of characters to ignore
     # Lemmatizes the sentence
     sentence_words = nltk.word_tokenize(sentence) # Use NLTK's tokenizer to tokenice the sentence
     sentence_words = [lemmatizer.lemmatize(word).lower()
