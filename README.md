@@ -25,12 +25,20 @@ TARS is an Artificial Intelligence system. TARS has access to API's that it can 
  Finally, the memory of TARS is persisted by the ability for me to upload and download his weights and nerual network to and from a MySQL database. This both secures the model, and adds for future ability to regularly update TARS's weights. 
 
 
-
 # Initialize TARS
 Follow the below steps to initialize TARS.
+
+            METHOD A - DOCKER
  - Pull down the docker image.
  - Run the docker image and map the ports to the host machine.
- - HTTP 'Post' requests can now be sent to the IP address of the host machine, from machines on the same wifi network. Use the '/chat' endpoint. (I.E. 172.168.0.1:8000/chat)
+ 
+            METHOD B - VIRTUALENV
+ - Clone the repository, create, and activate a new virtualenv.
+ - Run [ pip install -r requirements.txt ]
+ - Open a python session and run [ import nltk; nltk.download('punkt'); nltk.download('wordnet') ]
+ - Run [ python tars.py] 
+ 
+ HTTP 'Post' requests can now be sent to the IP address of the host machine, from machines on the same wifi network. Use the '/chat' endpoint. (I.E. 172.168.0.1:8000/chat)
  - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. The UI can be found in my TARS_UI repository.
 # TECHNOLOGIES
 - Python 3.9.12
@@ -39,7 +47,9 @@ Follow the below steps to initialize TARS.
 - NLTK, PyEnchant, and more.
 
 # REQUIRED MODULES
- All you need is docker, and the docker image :)
+ If using docker, all you need is the docker image.
+ 
+ If using python, all you need is virtualenv, nltk('punkt'), nltk('wordnet'), and the packages in requirements.txt.
 
 # DOCUMENTATION
 Documentation can be found in the 'Documents' directory located in the root of the project.
