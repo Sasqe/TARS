@@ -5,7 +5,7 @@ TARS is an Artificial Intelligence system. TARS has access to API's that it can 
 
 - TARS utilizes it's LSTM (Long Short-Term Memory) Embedded Recurrent Neural Network to process and classify language. 
 
-- This neural network works hand in hand with Keras' tokenizer and NLTK to map words to it's vector matrix, and compares an input to (n) output neurons, making probability predictions. 
+- This neural network works hand in hand with Keras' tokenizer and NLTK to map words to it's vector matrix, and compares an input to (n) output neurons where N is the number of intents, making (n) probability predictions. 
 
 # UNIQUE FEATURES
 
