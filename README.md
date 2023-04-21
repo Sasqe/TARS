@@ -82,3 +82,5 @@ Let's walk through some example conversations with TARS using the UI client.
 
 ![daily](https://user-images.githubusercontent.com/23193263/232141485-8c311723-bb19-40ab-a333-8fb78470b2f4.jpg)
 
+- GPT-3 Assistance
+![image](https://user-images.githubusercontent.com/23193263/233722036-6c03398a-313c-4200-a6d0-c98a47cee8ce.png)
