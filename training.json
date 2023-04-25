@@ -477,7 +477,7 @@
         "Currently, it is {}°F in this area.\n You may percieve this as {} degrees.",
         "The temperature in this area is currently {}°F, and feels like {}°F.",
         "The temperature in this area is {}°F, and feels like {}°F.",
-        "Current: °F\nFeels Like: °F"
+        "Current: {}°F\nFeels Like: {}°F"
       ],
       "context": "temp current"
     },
