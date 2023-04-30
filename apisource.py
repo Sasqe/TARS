@@ -38,7 +38,7 @@ class apiQuery():
     # SOURCE MODULE: tars.py
     # RETURNS: data returned from API endpoint
     def queryForecast(self, intent, day):
-        # try:
+        try:
             data = ""
             # First, we use API endpoint to generate latitude and longitude based on city and state.
             georeq = f'http://api.openweathermap.org/geo/1.0/direct?q=Phoenix,AZ,US&appid={os.getenv("WEATHER_KEY")}'
@@ -220,9 +220,10 @@ class apiQuery():
             # Error handling error if intent is not found        
             else:
                 data = "Error"
-                
+        except:
+            data = "My apologies. I encountered an error when trying to get that data."
             # Return data
-            return data
+        return data
                 
     # Function to query weather network API for current data
     # API for endpoint coordinates, we are using Phoenix AZ
