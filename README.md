@@ -14,12 +14,12 @@ TARS is an Artificial Intelligence system. TARS has access to API's that it can 
   ![image](https://user-images.githubusercontent.com/23193263/233720681-40751d09-5254-493d-a8b6-f8df5c05977b.png)
 
  - Threshold meets Chat-GPT:
-  TARS, as most chatbots do, has a confidence threshold in it's predictions. What I decided to do though, is rather than simply coding a response like "I'm sorry, I didnt understand", it will send the message to Chat-GPT for a response.
+  TARS, as most chatbots do, has a confidence threshold in it's predictions. What I decided to do though, is rather than simply a response like "I'm sorry, I didnt understand", it will send the message to Chat-GPT for a response.
   ![image](https://user-images.githubusercontent.com/23193263/233720820-8789ea8e-6ed0-4388-9d21-e0f095ed74c8.png)
 
   
  - Smooth UI Interface:
-  A smooth user interface has been built to allow for easy communication with TARS, and ease of authentication with the IP address and API key.
+  A smooth user interface has been built to allow for easy communication with TARS, and ease of authentication with the IP address and API key. The user interface client can be found here: https://github.com/Sasqe/TARS-UI.
   
  - Advanced Neural Network:
   TARS started off as a simple network with a couple dense layers and an output layer, using bag-of-words preprocessing. In other words, a basic tutorial copied from geeks-for-geeks. Now, TARS features an advanced LSTM recurrent neural network, with almost 50 thousand trainable parameters. Training architecture is now taking advantage of a technique called K-fold cross validation to ensure that TARS both trains on and validates on every piece of data that it's given. Data is preprocessed using methods such as token embedding and one-hot encoding. This allows for a fairly advanced understanding of the data that it was trained on.
@@ -44,7 +44,9 @@ Follow the below steps to initialize TARS.
  - Run [ python tars.py] 
  
  HTTP 'Post' requests can now be sent to the IP address of the host machine, from machines on the same wifi network. Use the '/chat' endpoint. (I.E. 172.168.0.1:8000/chat). Be sure to include the API key in the Auth header.
- - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. The UI can be found in my TARS_UI repository.
+ - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. Again, the UI can be found in my TARS_UI repository located here: https://github.com/Sasqe/TARS-UI.
+ 
+ 
 # TECHNOLOGIES
 - Python 3.9.12
 - Tensorflow 2.10.0, Keras 2.10.0
@@ -55,6 +57,12 @@ Follow the below steps to initialize TARS.
  If using docker, all you need is the docker image.
  
  If using python, all you need is virtualenv, nltk('punkt'), nltk('wordnet'), and the packages in requirements.txt.
+ 
+ Right now, the api key to communicate with TARS is simply 'tars'. However, you will need your own openAI and openweathermap API keys. create a .env file in the root of the directory and provide these three keys:
+ 
+WEATHER_KEY=[YOUR_WEATHERMAP_KEY]
+AI_KEY=[YOUR_OPENAI_KEY]
+TARS_KEY=tars
 
 # DOCUMENTATION
 Documentation can be found in the 'Documents' directory located in the root of the project.
