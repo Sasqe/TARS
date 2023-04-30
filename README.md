@@ -14,7 +14,7 @@ TARS is an Artificial Intelligence system. TARS has access to API's that it can 
   ![image](https://user-images.githubusercontent.com/23193263/233720681-40751d09-5254-493d-a8b6-f8df5c05977b.png)
 
  - Threshold meets Chat-GPT:
-  TARS, as most chatbots do, has a confidence threshold in it's predictions. What I decided to do though, is rather than simply coding a response like "I'm sorry, I didnt understand", it will send the message to Chat-GPT for a response.
+  TARS, as most chatbots do, has a confidence threshold in it's predictions. What I decided to do though, is rather than simply a response like "I'm sorry, I didnt understand", it will send the message to Chat-GPT for a response.
   ![image](https://user-images.githubusercontent.com/23193263/233720820-8789ea8e-6ed0-4388-9d21-e0f095ed74c8.png)
 
   
