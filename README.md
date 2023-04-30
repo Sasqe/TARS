@@ -44,7 +44,9 @@ Follow the below steps to initialize TARS.
  - Run [ python tars.py] 
  
  HTTP 'Post' requests can now be sent to the IP address of the host machine, from machines on the same wifi network. Use the '/chat' endpoint. (I.E. 172.168.0.1:8000/chat). Be sure to include the API key in the Auth header.
- - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. The UI can be found in my TARS_UI repository.
+ - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. The UI can be found in my TARS_UI repository located here: https://github.com/Sasqe/TARS-UI.
+ 
+ 
 # TECHNOLOGIES
 - Python 3.9.12
 - Tensorflow 2.10.0, Keras 2.10.0
