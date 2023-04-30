@@ -57,6 +57,12 @@ Follow the below steps to initialize TARS.
  If using docker, all you need is the docker image.
  
  If using python, all you need is virtualenv, nltk('punkt'), nltk('wordnet'), and the packages in requirements.txt.
+ 
+ Right now, the api key to communicate with TARS is simply 'tars'. However, you will need your own openAI and openweathermap API keys. create a .env file in the root of the directory and provide these three keys:
+ 
+WEATHER_KEY=[YOUR_WEATHERMAP_KEY]
+AI_KEY=[YOUR_OPENAI_KEY]
+TARS_KEY=tars
 
 # DOCUMENTATION
 Documentation can be found in the 'Documents' directory located in the root of the project.
