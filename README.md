@@ -19,7 +19,7 @@ TARS is an Artificial Intelligence system. TARS has access to API's that it can 
 
   
  - Smooth UI Interface:
-  A smooth user interface has been built to allow for easy communication with TARS, and ease of authentication with the IP address and API key.
+  A smooth user interface has been built to allow for easy communication with TARS, and ease of authentication with the IP address and API key. The user interface client can be found here: https://github.com/Sasqe/TARS-UI.
   
  - Advanced Neural Network:
   TARS started off as a simple network with a couple dense layers and an output layer, using bag-of-words preprocessing. In other words, a basic tutorial copied from geeks-for-geeks. Now, TARS features an advanced LSTM recurrent neural network, with almost 50 thousand trainable parameters. Training architecture is now taking advantage of a technique called K-fold cross validation to ensure that TARS both trains on and validates on every piece of data that it's given. Data is preprocessed using methods such as token embedding and one-hot encoding. This allows for a fairly advanced understanding of the data that it was trained on.
@@ -44,7 +44,7 @@ Follow the below steps to initialize TARS.
  - Run [ python tars.py] 
  
  HTTP 'Post' requests can now be sent to the IP address of the host machine, from machines on the same wifi network. Use the '/chat' endpoint. (I.E. 172.168.0.1:8000/chat). Be sure to include the API key in the Auth header.
- - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. The UI can be found in my TARS_UI repository located here: https://github.com/Sasqe/TARS-UI.
+ - You can also use the UI client to send requests. Make sure you've typed your API key and machine's IP address into the side navigation bar's respective slots. Again, the UI can be found in my TARS_UI repository located here: https://github.com/Sasqe/TARS-UI.
  
  
 # TECHNOLOGIES
